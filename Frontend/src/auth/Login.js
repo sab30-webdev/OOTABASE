@@ -1,9 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
-import logo from "../assets/OotaBaseLogo1.png";
+import logo from "../assets/OotaBaseLogo.png";
 import { useState } from "react";
 import axios from "axios";
 import { backendurl } from "../url/backendurl";
+import { toast } from "react-hot-toast";
 
 const Login = () => {
   const [logData, setLogData] = useState({
@@ -12,16 +13,23 @@ const Login = () => {
     job: "",
   });
 
+  const history = useHistory();
+
   const handleChange = (e) => {
     setLogData({ ...logData, [e.target.name]: e.target.value });
   };
 
   const login = async (e) => {
     e.preventDefault();
-
     try {
       const res = await axios.post(`${backendurl}/auth/login`, logData);
-      console.log(res);
+      if (logData.job === "Admin" && res.data === "Login Success") {
+        history.push("/admin");
+      } else if (res.data === "Login Success" && logData.job === "Waiter") {
+        history.push("/orderitem");
+      } else {
+        toast("Error");
+      }
     } catch (error) {
       console.error(error);
     }
@@ -29,12 +37,14 @@ const Login = () => {
 
   return (
     <div id="login-bg">
-      <div id="login-front">
+      <div id="login-front" className="shadow">
         <Form>
           <img src={logo} className="logo" alt="" />
+          <h1 style={{ textDecoration: "underline" }}>Log In</h1>
           <Form.Group className="m-3" controlId="UID">
-            <Form.Label>User ID</Form.Label>
+            <Form.Label>Username</Form.Label>
             <Form.Control
+              className="shadow"
               type="text"
               placeholder="Username"
               name="username"
@@ -44,6 +54,7 @@ const Login = () => {
           <Form.Group className="m-3" controlId="pass">
             <Form.Label>Password</Form.Label>
             <Form.Control
+              className="shadow"
               type="password"
               placeholder="Password"
               name="password"
@@ -51,7 +62,7 @@ const Login = () => {
             />
           </Form.Group>
           <Form.Select
-            className="m-3 class-select"
+            className="m-3 class-select shadow"
             aria-label="Job"
             name="job"
             onChange={handleChange}
@@ -63,12 +74,12 @@ const Login = () => {
             <option value="Kitchen">Kitchen</option>
             <option value="Admin">Admin</option>
           </Form.Select>
-          <Button className="m-3" variant="primary" onClick={login}>
+          <Button className="bt1 shadow" variant="primary" onClick={login}>
             Login
           </Button>
-          <span>
+          <p style={{ padding: "3vh" }}>
             Haven't Registered ? <Link to="/register">Register</Link>
-          </span>
+          </p>
         </Form>
       </div>
     </div>

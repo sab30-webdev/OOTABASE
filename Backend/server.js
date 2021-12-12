@@ -9,7 +9,7 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/api", require("./routes/route"));
 
 app.get("/", (req, res) => {
-  res.send("Hello world");
+  res.send("Hello");
 });
 
 app.listen(5000, () => {
