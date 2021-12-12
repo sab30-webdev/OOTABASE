@@ -1,0 +1,25 @@
+.menu-left {
+  display: inline-block;
+  width: 10vw;
+}
+.menu-price {
+  display: inline-block;
+  width: 5vw;
+  margin-left: 9vw;
+}
+.cart-left {
+  display: inline-block;
+  width: 8vw;
+}
+.cart-price {
+  display: inline-block;
+  width: 7vw;
+  margin-left: 2vw;
+}
+.scroll-limit {
+  max-height: 50%;
+  overflow-y: scroll;
+}
+#sidebar {
+  background-color: rgb(232, 240, 250);
+}
