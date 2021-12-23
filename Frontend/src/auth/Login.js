@@ -27,6 +27,8 @@ const Login = () => {
         history.push("/admin");
       } else if (res.data === "Login Success" && logData.job === "Waiter") {
         history.push("/orderitem");
+      } else if (res.data === "Login Success" && logData.job === "Kitchen") {
+        history.push("/kitchen");
       } else {
         toast("Error");
       }

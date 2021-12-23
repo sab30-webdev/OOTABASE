@@ -1,8 +1,8 @@
 const config = {
-  user: "sab",
-  password: "qwerty",
+  user: "Test123",
+  password: "1234",
   server: "localhost",
-  database: "RESTAURANT",
+  database: "OOTABASE",
   synchronize: true,
   trustServerCertificate: true,
 };
