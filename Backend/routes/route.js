@@ -39,4 +39,26 @@ router.get("/menu", (req, res) => {
   });
 });
 
+router.post("/order", (req, res) => {
+  sql.connect(config, (err) => {
+    if (err) console.error(err);
+
+    const { tno, itemid, qty, price, orderid, i_status } = req.body;
+
+    try {
+      var request = new sql.Request();
+      request.query(
+        `INSERT INTO ORDER_ITEM VALUES(${tno},${itemid},${qty},${price},'${orderid}',${i_status});
+      UPDATE CUSTOMER SET orderid = '${orderid}' where tno=${tno}`,
+        (err, data) => {
+          if (err) return res.send(err);
+          else return res.send("Success");
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  });
+});
+
 module.exports = router;

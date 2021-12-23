@@ -4,64 +4,12 @@ import items from "./Menu";
 import Shop from "./Shop";
 import Navbar from "./Navbar1";
 import "./Waiter.css";
+import axios from "axios";
+import { backendurl } from "./url/backendurl";
 
-const CustIn = ({ TNo }) => {
-  // const [flag, setFlag] = useState(false);
-  return (
-    <>
-      <div id="login-bg">
-        <div id="lock-front" className="shadow">
-          <h4>Table No. {TNo}</h4>
-          <Form>
-            <Form.Group className="m-3" controlId="UID">
-              <Form.Label>Customer Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter CName"
-                className="shadow"
-              />
-            </Form.Group>
-
-            <Form.Group className="m-3" controlId="pass">
-              <Form.Label>Phone Number</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter Ph No"
-                className="shadow"
-              />
-            </Form.Group>
-            <Button
-              className="m-3"
-              variant="primary"
-              // onClick={() => {
-              //   setFlag(true);
-              // }}
-              type="submit"
-            >
-              Submit
-            </Button>
-            {/* {flag ? <WaitView /> : null} */}
-          </Form>
-        </div>
-      </div>
-    </>
-  );
-};
-
-const WaitView = ({ TNo, CName, CPh }) => {
-  const [menuItems, setMenuItems] = useState(items);
-  return (
-    <>
-      <Row>
-        <div id="custDetail">
-          <h4>Table No. {TNo}</h4>
-        </div>
-        <Shop items={menuItems} className="mx-2 my-2" />
-      </Row>
-    </>
-  );
-};
-function OrderItem() {
+const OrderItem = () => {
+  let tables = [1, 2, 3, 4];
+  const [bookedTable, setbookedTable] = useState(1);
   return (
     <>
       <Navbar />
@@ -69,57 +17,19 @@ function OrderItem() {
         <Row>
           <Col sm={3} id="sidebar">
             <Nav variant="pills" className="flex-column">
-              <Nav.Item>
-                <Nav.Link eventKey="first">Table 1</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="second">Table 2</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="third">Table 3</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="fourth">Table 4</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="fifth">Table 5</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="sixth">Table 6</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="seventh">Table 7</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="eighth">Table 8</Nav.Link>
-              </Nav.Item>
+              {tables.map((t) => (
+                <Nav.Item>
+                  <Nav.Link onClick={() => setbookedTable(t)}>
+                    Table {t}
+                  </Nav.Link>
+                </Nav.Item>
+              ))}
             </Nav>
           </Col>
           <Col sm={9}>
             <Tab.Content>
               <Tab.Pane eventKey="first">
-                <CustIn TNo="1" />
-              </Tab.Pane>
-              <Tab.Pane eventKey="second">
-                <WaitView TNo="2" />
-              </Tab.Pane>
-              <Tab.Pane eventKey="third">
-                <CustIn TNo="3" />
-              </Tab.Pane>
-              <Tab.Pane eventKey="fourth">
-                <CustIn TNo="4" />
-              </Tab.Pane>
-              <Tab.Pane eventKey="fifth">
-                <CustIn TNo="5" />
-              </Tab.Pane>
-              <Tab.Pane eventKey="sixth">
-                <CustIn TNo="6" />
-              </Tab.Pane>
-              <Tab.Pane eventKey="seventh">
-                <CustIn TNo="7" />
-              </Tab.Pane>
-              <Tab.Pane eventKey="eighth">
-                <CustIn TNo="8" />
+                <CustIn TNo={bookedTable} />
               </Tab.Pane>
             </Tab.Content>
           </Col>
@@ -127,9 +37,85 @@ function OrderItem() {
       </Tab.Container>
     </>
   );
-}
+};
 
 export default OrderItem;
+
+const CustIn = ({ TNo }) => {
+  const [showWaitView, setShowWaitView] = useState(false);
+  const [custData, setCustData] = useState({ cname: "", cphone: "" });
+
+  const lock = async () => {
+    let data = { ...custData, t_status: 1, tno: TNo };
+
+    try {
+      const res = await axios.post(`${backendurl}/booktable`, data);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+    setShowWaitView(true);
+    console.log(data);
+  };
+
+  return (
+    <>
+      {!showWaitView ? (
+        <div id="login-bg">
+          <div id="lock-front" className="shadow">
+            <h4>Table No. {TNo}</h4>
+            <Form>
+              <Form.Group className="m-3">
+                <Form.Label>Customer Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter Customer Name"
+                  className="shadow"
+                  name="cname"
+                  onChange={(e) =>
+                    setCustData({ ...custData, cname: e.target.value })
+                  }
+                />
+              </Form.Group>
+
+              <Form.Group className="m-3">
+                <Form.Label>Phone Number</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter Phone No"
+                  className="shadow"
+                  name="cphone"
+                  onChange={(e) =>
+                    setCustData({ ...custData, cphone: e.target.value })
+                  }
+                />
+              </Form.Group>
+              <Button className="m-3" variant="primary" onClick={lock}>
+                Lock
+              </Button>
+            </Form>
+          </div>
+        </div>
+      ) : (
+        <WaitView tno={TNo} />
+      )}
+    </>
+  );
+};
+
+const WaitView = ({ tno }) => {
+  const [menuItems, setMenuItems] = useState(items);
+  return (
+    <>
+      <Row>
+        <div id="custDetail">
+          <h4> Order for Table No. {tno}</h4>
+        </div>
+        <Shop tno={tno} className="mx-2 my-2" />
+      </Row>
+    </>
+  );
+};
 
 // const Menu = ({ items }) => {
 //   return (
