@@ -15,9 +15,9 @@ router.post("/admin", (req, res) => {
         `INSERT INTO USERS VALUES('${uid}','${name}','${job}','','') `,
         (err, data) => {
           if (err) {
-            res.send("Fail");
+            res.send("fail");
           } else {
-            res.send("Registerd User Successfully");
+            res.send("success");
           }
         }
       );
