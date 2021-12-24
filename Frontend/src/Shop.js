@@ -3,10 +3,12 @@ import { Row, Col, Button, ListGroup } from "react-bootstrap";
 import axios from "axios";
 import { backendurl } from "./url/backendurl";
 import { nanoid } from "nanoid";
+import { useHistory } from "react-router-dom";
 
 const Shop = ({ tno }) => {
   const [cart, setCart] = useState([]);
   const [menuItems, setMenuItems] = useState([]);
+  const history = useHistory();
 
   useEffect(() => {
     async function fetchData() {
@@ -19,10 +21,6 @@ const Shop = ({ tno }) => {
     }
     fetchData();
   }, []);
-
-  // useEffect(() => {
-  //   console.log("cart", cart);
-  // }, [cart]);
 
   const addToCart = (item) => {
     if (cart.length === 0) {
@@ -59,6 +57,7 @@ const Shop = ({ tno }) => {
 
   const Order = () => {
     let orderid = nanoid();
+    let err = false;
     cart.forEach(async (cartItem) => {
       let { itemid, qty, price } = cartItem;
       let obj = {
@@ -69,13 +68,19 @@ const Shop = ({ tno }) => {
         orderid,
         i_status: 0,
       };
-      console.log(obj);
-
-      let { data } = await axios.post(`${backendurl}/order`, obj);
-      if (data === "Success") {
-        alert("Order Success");
+      try {
+        await axios.post(`${backendurl}/order`, obj);
+      } catch (error) {
+        err = true;
+        console.error(error);
       }
     });
+
+    if (!err) {
+      alert("ordered");
+    } else {
+      alert("Order failed");
+    }
   };
 
   const cartTotal = () => {
@@ -86,11 +91,15 @@ const Shop = ({ tno }) => {
     return total;
   };
 
+  const goToBilling = () => {
+    history.push(`/billing/${tno}`);
+  };
+
   const listItemsToBuy = () => (
     <div className="section-center scroll-limit">
       <ListGroup as="ul">
-        {menuItems.map((item) => (
-          <ListGroup.Item as="li">
+        {menuItems.map((item, idx) => (
+          <ListGroup.Item as="li" key={idx}>
             <article key={item.itemid} className="menu-item">
               <div className="item-info">
                 <header>
@@ -115,8 +124,8 @@ const Shop = ({ tno }) => {
   const listItemsInCart = () => (
     <div className="section-center scroll-limit">
       <ListGroup as="ul">
-        {cart.map((item) => (
-          <ListGroup.Item as="li">
+        {cart.map((item, idx) => (
+          <ListGroup.Item as="li" key={idx}>
             <article key={item.itemid} className="menu-item">
               <div className="item-info">
                 <header>
@@ -158,6 +167,13 @@ const Shop = ({ tno }) => {
             </Button>
           </div>
         </Col>
+      </Row>
+      <Row>
+        <div>
+          <Button variant="secondary" onClick={goToBilling}>
+            Go to Billing
+          </Button>
+        </div>
       </Row>
     </div>
   );
