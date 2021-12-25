@@ -22,7 +22,11 @@ export default function Navbar1() {
 
   return (
     <Navbar bg="light" variant="light" style={{ padding: "0.3% 2%" }}>
-      <Navbar.Brand href="#home">
+      <Navbar.Brand
+        onClick={() => {
+          history.push("/login");
+        }}
+      >
         <img
           alt=""
           src={logow}

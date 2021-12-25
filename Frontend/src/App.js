@@ -6,6 +6,10 @@ import Admin from "./Admin";
 import Book from "./Book";
 import Billing from "./Billing";
 import Navbar from "./Navbar1";
+import Kitchen from "./Kitchen";
+import { ProtectedAdminRoute } from "./auth/ProtectedRoute";
+import { ProtectedWaiterRoute } from "./auth/ProtectedRoute";
+import { ProtectedKitchenRoute } from "./auth/ProtectedRoute";
 
 const App = () => {
   return (
@@ -14,10 +18,21 @@ const App = () => {
       <Switch>
         <Route exact path="/register" component={Register} />
         <Route exact path="/login" component={Login} />
-        <Route exact path="/booktable" component={Book} />
-        <Route exact path="/orderitem/:tno" component={OrderItem} />
-        <Route exact path="/billing/:tno" component={Billing} />
-        <Route exact path="/admin" component={Admin} />
+        <ProtectedAdminRoute exact path="/admin">
+          <Admin />
+        </ProtectedAdminRoute>
+        <ProtectedWaiterRoute exact path="/booktable">
+          <Book />
+        </ProtectedWaiterRoute>
+        <ProtectedWaiterRoute exact path="/orderitem/:tno">
+          <OrderItem />
+        </ProtectedWaiterRoute>
+        <ProtectedWaiterRoute exact path="/billing/:tno">
+          <Billing />
+        </ProtectedWaiterRoute>
+        <ProtectedKitchenRoute exact path="/kitchen">
+          <Kitchen />
+        </ProtectedKitchenRoute>
         <Route exact path="/">
           <Redirect to="/login" />
         </Route>
