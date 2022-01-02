@@ -1,20 +1,9 @@
-import {
-  Button,
-  Form,
-  Nav,
-  Tab,
-  Row,
-  Col,
-  Modal,
-  Table,
-} from "react-bootstrap";
-import logo from "./assets/OotaBaseLogo.png";
+import { Button, Table } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { backendurl } from "./url/backendurl";
-import "./Admin.css";
 
-function StaffMgmt({ handleClick }) {
+function StaffMgmt() {
   // DISPLAY PART
 
   const [staffData, setStaffData] = useState([]);
@@ -48,10 +37,10 @@ function StaffMgmt({ handleClick }) {
   };
 
   return (
-    <div className="gap">
-      <Table striped bordered hover size="sm">
+    <div className="gap px-3">
+      <Table striped hover size="sm" className="radius">
         <thead>
-          <tr variant="primary">
+          <tr className="trow">
             <th>UID</th>
             <th>Name</th>
             <th>Job</th>
@@ -59,16 +48,15 @@ function StaffMgmt({ handleClick }) {
           </tr>
         </thead>
         <tbody>
-          {staffData.map((t) => {
+          {staffData.map((t, idx) => {
             return (
-              <tr>
+              <tr key={idx}>
                 <td>{t.uid}</td>
                 <td>{t.name}</td>
                 <td>{t.job}</td>
                 <td>
                   <Button
-                    className="bt1 shadow"
-                    variant="primary"
+                    className="delbtn shadow"
                     onClick={() => Delete(t.uid)}
                   >
                     Delete

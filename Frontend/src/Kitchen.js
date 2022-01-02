@@ -1,23 +1,14 @@
-import {
-  Button,
-  Form,
-  Nav,
-  Tab,
-  Row,
-  Col,
-  Modal,
-  Table,
-} from "react-bootstrap";
-import logo from "./assets/OotaBaseLogo.png";
+import { Button, Table } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { backendurl } from "./url/backendurl";
-import "./Admin.css";
+import "./Waiter.css";
 
 function MenuDisplay() {
   // DISPLAY PART
   const [orderData, setOrderData] = useState([]);
   const [refresh, setRefresh] = useState(false);
+
   useEffect(() => {
     async function call() {
       try {
@@ -34,14 +25,17 @@ function MenuDisplay() {
   }, [refresh]);
   // DELETION PART
 
+  // setInterval(() => {
+  //   setRefresh(!refresh);
+  // }, 3000);
+
   const Delete = async (itemid, ordid) => {
     let delData = {};
     delData.itemid = itemid;
     delData.orderid = ordid;
     console.log(delData);
     try {
-      const res = await axios.post(`${backendurl}/delkitchen`, delData);
-      console.log(res);
+      await axios.post(`${backendurl}/delkitchen`, delData);
       setRefresh(!refresh);
     } catch (error) {
       console.log(error);
@@ -49,10 +43,10 @@ function MenuDisplay() {
   };
 
   return (
-    <div className="gap">
-      <Table striped bordered hover size="sm">
+    <div className="gap px-3">
+      <Table striped hover size="sm">
         <thead>
-          <tr variant="primary">
+          <tr className="trow">
             <th>Table No.</th>
             <th>Item Name</th>
             <th>Qty</th>
@@ -64,9 +58,9 @@ function MenuDisplay() {
           {orderData.map((t) => {
             return (
               <tr>
-                <td>{t.TNo}</td>
-                <td>{t.IName}</td>
-                <td>{t.Qty}</td>
+                <td>{t.tno}</td>
+                <td>{t.itemname}</td>
+                <td>{t.qty}</td>
                 <td>{t.orderid}</td>
                 <td>
                   <Button

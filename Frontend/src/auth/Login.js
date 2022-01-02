@@ -24,13 +24,16 @@ const Login = () => {
     try {
       const res = await axios.post(`${backendurl}/auth/login`, logData);
       if (logData.job === "Admin" && res.data === "Login Success") {
+        localStorage.setItem("token", "admin");
         history.push("/admin");
       } else if (res.data === "Login Success" && logData.job === "Waiter") {
-        history.push("/orderitem");
+        localStorage.setItem("token", "waiter");
+        history.push("/booktable");
       } else if (res.data === "Login Success" && logData.job === "Kitchen") {
+        localStorage.setItem("token", "kitchen");
         history.push("/kitchen");
       } else {
-        toast("Error");
+        toast.error("Login Error");
       }
     } catch (error) {
       console.error(error);

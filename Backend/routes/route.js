@@ -3,6 +3,91 @@ const router = express.Router();
 const sql = require("mssql");
 const config = require("../config");
 
+router.get("/custinfo/:tno", (req, res) => {
+  sql.connect(config, (err) => {
+    if (err) console.error(err);
+
+    let { tno } = req.params;
+
+    try {
+      var request = new sql.Request();
+      request.query(
+        `SELECT * FROM CUSTOMER WHERE tno='${tno}'`,
+        (err, data) => {
+          if (err) return res.send("error");
+          res.send(data.recordset);
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  });
+});
+
+router.post("/clear/:tno", (req, res) => {
+  sql.connect(config, (err) => {
+    if (err) console.error(err);
+
+    let { tno } = req.params;
+    let { cname, cphone, billamt } = req.body;
+
+    try {
+      var request = new sql.Request();
+      request.query(
+        `DELETE FROM CUSTOMER WHERE tno=${tno};
+        DELETE FROM ORDER_ITEM WHERE tno=${tno};
+        UPDATE TABLELIST SET t_status=0 where tno=${tno};
+        INSERT INTO TRANSACTIONS (cname,cphone,billamt) VALUES('${cname}',${cphone},${billamt})
+        `,
+        (err, data) => {
+          if (err) return res.send(err);
+          res.send("success");
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  });
+});
+
+router.post("/tablecheck", (req, res) => {
+  sql.connect(config, (err) => {
+    if (err) console.error(err);
+
+    let { tno } = req.body;
+
+    try {
+      var request = new sql.Request();
+      request.query(`SELECT * FROM TABLELIST WHERE tno=${tno}`, (err, data) => {
+        res.send(data.recordset);
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  });
+});
+
+router.get("/bill/:tno", (req, res) => {
+  sql.connect(config, (err) => {
+    if (err) console.error(err);
+
+    let { tno } = req.params;
+
+    try {
+      var request = new sql.Request();
+      request.query(
+        `SELECT itemname,price,qty,rate,i_status FROM ORDER_ITEM O,MENU M WHERE O.itemid=M.itemid AND tno=${tno}`,
+        (err, data) => {
+          if (err) return res.send(err);
+          res.send(data.recordset);
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  });
+});
+
 router.post("/booktable", (req, res) => {
   sql.connect(config, (err) => {
     if (err) console.error(err);
@@ -39,12 +124,35 @@ router.get("/menu", (req, res) => {
   });
 });
 
+router.post("/order", (req, res) => {
+  sql.connect(config, (err) => {
+    if (err) console.error(err);
+
+    const { tno, itemid, qty, price, orderid, i_status } = req.body;
+
+    try {
+      var request = new sql.Request();
+      request.query(
+        `INSERT INTO ORDER_ITEM VALUES(${tno},${itemid},${qty},${price},'${orderid}',${i_status});
+      UPDATE CUSTOMER SET orderid = '${orderid}' where tno=${tno}`,
+        (err, data) => {
+          if (err) return res.send(err);
+          else return res.send("Success");
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  });
+});
+
+////////////////////////////////////////////////////////////////////////
+
 router.post("/delmenu", (req, res) => {
   sql.connect(config, (err) => {
     if (err) console.error(err);
 
     const { itemid } = req.body;
-    console.log("itemid", itemid);
 
     try {
       var request = new sql.Request();
@@ -69,7 +177,6 @@ router.post("/insertmenu", (req, res) => {
     if (err) console.error(err);
 
     const { itemid, Iname, price } = req.body;
-    console.log("uid", itemid);
 
     try {
       var request = new sql.Request();
@@ -111,7 +218,6 @@ router.post("/delstaff", (req, res) => {
     if (err) console.error(err);
 
     const { uid } = req.body;
-    console.log("uid", uid);
 
     try {
       var request = new sql.Request();
@@ -137,7 +243,7 @@ router.get("/kitchen", (req, res) => {
     try {
       var request = new sql.Request();
       request.query(
-        `SELECT TNo,IName,O.itemid,Qty,orderid FROM ORDER_ITEM O,MENU M where I_Status=0 and O.itemid=M.itemid`,
+        `SELECT tno,itemname,O.itemid,qty,orderid FROM ORDER_ITEM O,MENU M where i_status=0 and O.itemid=M.itemid`,
         (err, data) => {
           res.send(data.recordset);
         }
@@ -153,17 +259,35 @@ router.post("/delkitchen", (req, res) => {
     if (err) console.error(err);
 
     const { itemid, orderid } = req.body;
-    console.log(req.body);
+
     try {
       var request = new sql.Request();
       request.query(
-        `UPDATE ORDER_ITEM SET I_Status=1 WHERE  itemid=${itemid} and orderid=${orderid}`,
+        `UPDATE ORDER_ITEM SET I_Status=1 WHERE  itemid=${itemid} and orderid='${orderid}'`,
         (err, data) => {
           if (err) {
             res.send("Fail");
           } else {
             res.send("Delete successful");
           }
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  });
+});
+//////////////
+router.get("/transact", (req, res) => {
+  sql.connect(config, (err) => {
+    if (err) console.error(err);
+
+    try {
+      var request = new sql.Request();
+      request.query(
+        `SELECT * FROM TRANSACTIONS order by timestamp desc`,
+        (err, data) => {
+          res.send(data.recordset);
         }
       );
     } catch (error) {

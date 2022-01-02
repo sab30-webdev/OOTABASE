@@ -1,123 +1,190 @@
-import React from "react";
-import items from "./data";
-import { Row, Col, Button, ListGroup } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Row, Col, Button, Table } from "react-bootstrap";
+import axios from "axios";
+import { backendurl } from "./url/backendurl";
+import { nanoid } from "nanoid";
+import { useHistory } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
-const Shop = () => {
-  const [cart, setCart] = React.useState([]);
-  const cartTotal = cart.reduce((total, { price = 0 }) => total + price, 0);
+const Shop = ({ tno }) => {
+  const [cart, setCart] = useState([]);
+  const [menuItems, setMenuItems] = useState([]);
+  const history = useHistory();
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const { data } = await axios.get(`${backendurl}/menu`);
+        setMenuItems(data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchData();
+  }, []);
 
   const addToCart = (item) => {
-    setCart((currentCart) => [...currentCart, item]);
-    console.log(cart);
-  };
-
-  const removeFromCart = (item) => {
-    setCart((currentCart) => {
-      const indexOfItemToRemove = currentCart.findIndex(
-        (cartItem) => cartItem.id === item.id
-      );
-
-      if (indexOfItemToRemove === -1) {
-        return currentCart;
+    if (cart.length === 0) {
+      setCart([{ ...item, qty: 1, price: item.rate }]);
+    } else {
+      let res = cart.filter((o) => o.itemid === item.itemid);
+      if (res.length > 0) {
+        let result = cart.map((o) =>
+          o.itemid === item.itemid
+            ? { ...o, qty: o.qty + 1, price: (o.qty + 1) * o.rate }
+            : o
+        );
+        setCart(result);
+      } else {
+        setCart([...cart, { ...item, qty: 1, price: item.rate }]);
       }
-
-      return [
-        ...currentCart.slice(0, indexOfItemToRemove),
-        ...currentCart.slice(indexOfItemToRemove + 1),
-      ];
-    });
+    }
   };
 
-  const amountOfItems = (id) => cart.filter((item) => item.id === id).length;
+  const removeFromCart = (id) => {
+    let find = cart.filter((o) => o.itemid === id);
+    if (find[0].qty === 1) {
+      setCart(cart.filter((o) => o.itemid !== id));
+    } else {
+      setCart(
+        cart.map((o) =>
+          o.itemid === id
+            ? { ...o, qty: o.qty - 1, price: (o.qty - 1) * o.rate }
+            : o
+        )
+      );
+    }
+  };
+
+  const Order = () => {
+    let orderid = nanoid();
+    let err = false;
+    cart.forEach(async (cartItem) => {
+      let { itemid, qty, price } = cartItem;
+      let obj = {
+        tno,
+        itemid,
+        qty,
+        price,
+        orderid,
+        i_status: 0,
+      };
+      try {
+        await axios.post(`${backendurl}/order`, obj);
+      } catch (error) {
+        err = true;
+        console.error(error);
+      }
+    });
+
+    if (!err) {
+      toast.success("Order Succes");
+    } else {
+      toast.error("Order failed");
+    }
+  };
+
+  const cartTotal = () => {
+    let total = 0;
+    for (let item of cart) {
+      total = total + item.price;
+    }
+    return total;
+  };
+
+  const goToBilling = () => {
+    history.push(`/billing/${tno}`);
+  };
 
   const listItemsToBuy = () => (
-    <div className="section-center scroll-limit">
-      <ListGroup as="ul">
-        {items.map((item) => (
-          <ListGroup.Item as="li">
-            <article key={item.id} className="menu-item">
-              <div className="item-info">
-                <header>
-                  <p className="menu-left">{item.name}</p>
-                  <p className="menu-price">Rs. {item.price}</p>
-                  <Button
-                    type="submit"
-                    className="menu-price"
-                    onClick={() => addToCart(item)}
-                  >
-                    Add
-                  </Button>
-                </header>
-              </div>
-            </article>
-          </ListGroup.Item>
-        ))}
-      </ListGroup>
+    <div className="ms-3 section-center scroll-limit mb-3 radius">
+      <Table striped hover>
+        <thead>
+          <tr className="trow">
+            <th>Item Name</th>
+            <th>Price</th>
+            <th>Add</th>
+          </tr>
+        </thead>
+        <tbody>
+          {menuItems.map((item, idx) => (
+            <tr>
+              <td key={item.itemid}>{item.itemname}</td>
+              <td>Rs. {item.rate}</td>
+              <td>
+                <Button
+                  className="addbtn"
+                  type="submit"
+                  onClick={() => addToCart(item)}
+                >
+                  Add
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </div>
-    // <div key={item.id}>
-    //   {`${item.name}: Rs${item.price}`}
-    //   <button type="submit" onClick={() => addToCart(item)}>
-    //     Add
-    //   </button>
-    // </div>
   );
 
   const listItemsInCart = () => (
-    <div className="section-center scroll-limit">
-      <ListGroup as="ul">
-        {items
-          .filter((items) => amountOfItems(items.id) > 0)
-          .map((item) => (
-            <ListGroup.Item as="li">
-              <article key={item.id} className="menu-item">
-                <div className="item-info">
-                  <header>
-                    <p className="cart-left">
-                      {item.name}({amountOfItems(item.id)})
-                    </p>
-                    <p className="cart-price">
-                      Rs. {amountOfItems(item.id) * item.price}
-                    </p>
-                    <Button
-                      className="cart-price"
-                      type="submit"
-                      onClick={() => removeFromCart(item)}
-                    >
-                      Remove
-                    </Button>
-                  </header>
-                </div>
-              </article>
-            </ListGroup.Item>
+    <div className="section-center radius scroll-limit">
+      <Table striped hover className="mb-3 ">
+        <thead>
+          <tr className="trow">
+            <th>Item Name</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Remove</th>
+          </tr>
+        </thead>
+        <tbody>
+          {cart.map((item, idx) => (
+            <tr>
+              <td key={item.itemid}>{item.itemname}</td>
+              <td>{item.qty}</td>
+              <td>Rs. {item.price}</td>
+              <td>
+                <Button
+                  type="submit"
+                  className="delbtn"
+                  onClick={() => removeFromCart(item.itemid)}
+                >
+                  Remove
+                </Button>
+              </td>
+            </tr>
           ))}
-      </ListGroup>
+        </tbody>
+      </Table>
     </div>
   );
-
-  items.map((item) => (
-    <div key={item.id}>
-      ({amountOfItems(item.id)} x ${item.price}) {`${item.name}`}
-      <button type="submit" onClick={() => removeFromCart(item)}>
-        Remove
-      </button>
-    </div>
-  ));
 
   return (
     <div>
       <Row>
-        <Col xs={12} md={7}>
-          <h4>MENU</h4>
-          {listItemsToBuy()}
+        <Col xs={12} md={5}>
+          <div className=" mx-3 pb-2">
+            <h4 className=" ms-3 p-2  body">MENU</h4>
+            {listItemsToBuy()}
+          </div>
         </Col>
         <Col xs={12} md={5}>
-          <h4>ORDER</h4>
+          <h4 className="p-2 body">ORDER</h4>
           {listItemsInCart()}
-          <div>Total: Rs {cartTotal}</div>
+        </Col>
+        <Col xs={12} md={2}>
           <div>
-            <Button onClick={() => setCart([])}>Clear</Button>
-            <Button className="cart-price" onClick={() => setCart([])}>
+            <p className=" px-1 mb-3">Total: Rs {cartTotal()}</p>
+            <Button className="button2 delbtn" onClick={() => setCart([])}>
+              Clear
+            </Button>
+            <br />
+            <Button className="my-3 button2 addbtn" onClick={Order}>
               Order
+            </Button>
+            <Button className="button2 billbtn" onClick={goToBilling}>
+              Billing
             </Button>
           </div>
         </Col>

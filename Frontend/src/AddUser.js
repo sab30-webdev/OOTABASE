@@ -1,19 +1,23 @@
-import { Button, Form, Nav, Tab, Row, Col, Table } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import logo from "./assets/OotaBaseLogo.png";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { backendurl } from "./url/backendurl";
-// import { toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 
-const AddUser = ({ handleClick }) => {
+const AddUser = () => {
   const [adminData, setAdminData] = useState({ uid: "", name: "", job: "" });
 
   const Submit = async (e) => {
     e.preventDefault();
 
     try {
-      const res = await axios.post(`${backendurl}/auth/admin`, adminData);
-      console.log(res);
+      const { data } = await axios.post(`${backendurl}/auth/admin`, adminData);
+      if (data === "success") {
+        toast.success("User added Successfully");
+      } else {
+        toast.error("Failed");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -62,11 +66,7 @@ const AddUser = ({ handleClick }) => {
             <option value="Kitchen">Kitchen</option>
             <option value="Admin">Admin</option>
           </Form.Select>
-          <Button
-            className="bt1 shadow"
-            variant="primary"
-            onClick={() => handleClick()}
-          >
+          <Button className="bt1 shadow" variant="primary" onClick={Submit}>
             Set User
           </Button>
         </Form>

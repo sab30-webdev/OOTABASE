@@ -1,73 +1,51 @@
-import { Button, Form } from "react-bootstrap";
-import logo from "./assets/OotaBaseLogo.png";
-import { useState } from "react";
-import axios from "axios";
-import { backendurl } from "./url/backendurl";
-// import { toast } from "react-hot-toast";
+import { Nav, Tab, Row, Col } from "react-bootstrap";
+import AddUser from "./AddUser";
+import MenuDisplay from "./MenuDisp";
+import StaffMgmt from "./StaffMgmt";
+import Transact from "./Transact";
+import "./Waiter.css";
 
 const Admin = () => {
-  const [adminData, setAdminData] = useState({ uid: "", name: "", job: "" });
-
-  const handleChange = (e) => {
-    setAdminData({ ...adminData, [e.target.name]: e.target.value });
-  };
-
-  const Submit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const res = await axios.post(`${backendurl}/auth/admin`, adminData);
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+  const handleClick = () => {};
   return (
-    <div id="login-bg">
-      <div id="login-front" className="shadow">
-        <Form>
-          <img src={logo} className="logo" alt="" />
-          <h1 style={{ textDecoration: "underline" }}>Set User</h1>
-          <Form.Group className="m-3" controlId="UID">
-            <Form.Label>UID</Form.Label>
-            <Form.Control
-              className="shadow"
-              type="text"
-              placeholder="Enter UID"
-              name="uid"
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group className="m-3" controlId="pass">
-            <Form.Label>Emp Name</Form.Label>
-            <Form.Control
-              className="shadow"
-              type="text"
-              placeholder="Enter Name"
-              name="name"
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Select
-            className="m-3 class-select shadow"
-            aria-label="Job"
-            name="job"
-            onChange={handleChange}
-          >
-            <option selected disabled>
-              Job
-            </option>
-            <option value="Waiter">Waiter</option>
-            <option value="Kitchen">Kitchen</option>
-            <option value="Admin">Admin</option>
-          </Form.Select>
-          <Button className="bt1 shadow" variant="primary" onClick={Submit}>
-            Set User
-          </Button>
-        </Form>
-      </div>
-    </div>
+    <>
+      <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+        <Row>
+          <Col sm={3}>
+            <Nav variant="pills" className="flex-column">
+              <Nav.Item>
+                <Nav.Link eventKey="first">Add User</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="second">See Menu</Nav.Link>
+              </Nav.Item>
+              <Nav.Item onClick={handleClick}>
+                <Nav.Link eventKey="third">See Staff</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="fourth">Transactions</Nav.Link>
+              </Nav.Item>
+            </Nav>
+          </Col>
+          <Col sm={9}>
+            <Tab.Content>
+              <Tab.Pane eventKey="first">
+                <AddUser />
+              </Tab.Pane>
+              <Tab.Pane eventKey="second">
+                <MenuDisplay />
+              </Tab.Pane>
+              <Tab.Pane eventKey="third">
+                <StaffMgmt handleClick={handleClick} />
+              </Tab.Pane>
+              <Tab.Pane eventKey="fourth">
+                <Transact />
+              </Tab.Pane>
+            </Tab.Content>
+          </Col>
+        </Row>
+      </Tab.Container>
+    </>
   );
 };
 

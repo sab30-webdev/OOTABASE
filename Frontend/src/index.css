@@ -42,15 +42,12 @@
 }
 
 .shadow {
-  -webkit-box-shadow: 8px 3px 15px 0px rgba(0, 0, 0, 0.64);
-  box-shadow: 8px 3px 15px 0px rgba(0, 0, 0, 0.64);
+  -webkit-box-shadow: 8px 3px 15px 0px rgba(240, 114, 114, 0.2);
+  box-shadow: 8px 3px 15px 0px rgba(0, 0, 0, 0.2);
 }
 
 .bt1 {
   background-color: darkblue;
   border-radius: 0%;
   padding: 2% 5%;
-}
-.gap {
-  padding: 2vh;
 }

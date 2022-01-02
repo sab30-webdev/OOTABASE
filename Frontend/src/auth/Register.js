@@ -27,9 +27,7 @@ const Register = () => {
       console.log(res);
       if (res.data === "Register Success") {
         history.push("/login");
-      } //else {
-      //Alert("Register Failed");
-      //}
+      }
     } catch (error) {
       console.error(error);
     }

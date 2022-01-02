@@ -3,18 +3,36 @@ import Register from "./auth/Register";
 import Login from "./auth/Login";
 import OrderItem from "./OrderItem";
 import Admin from "./Admin";
-import Admin2 from "./Admin2";
+import Book from "./Book";
+import Billing from "./Billing";
+import Navbar from "./Navbar1";
 import Kitchen from "./Kitchen";
+import { ProtectedAdminRoute } from "./auth/ProtectedRoute";
+import { ProtectedWaiterRoute } from "./auth/ProtectedRoute";
+import { ProtectedKitchenRoute } from "./auth/ProtectedRoute";
 
 const App = () => {
   return (
     <div className="App">
+      <Navbar />
       <Switch>
         <Route exact path="/register" component={Register} />
         <Route exact path="/login" component={Login} />
-        <Route exact path="/orderitem" component={OrderItem} />
-        <Route exact path="/admin" component={Admin2} />
-        <Route exact path="/kitchen" component={Kitchen} />
+        <ProtectedAdminRoute exact path="/admin">
+          <Admin />
+        </ProtectedAdminRoute>
+        <ProtectedWaiterRoute exact path="/booktable">
+          <Book />
+        </ProtectedWaiterRoute>
+        <ProtectedWaiterRoute exact path="/orderitem/:tno">
+          <OrderItem />
+        </ProtectedWaiterRoute>
+        <ProtectedWaiterRoute exact path="/billing/:tno">
+          <Billing />
+        </ProtectedWaiterRoute>
+        <ProtectedKitchenRoute exact path="/kitchen">
+          <Kitchen />
+        </ProtectedKitchenRoute>
         <Route exact path="/">
           <Redirect to="/login" />
         </Route>
