@@ -4,6 +4,7 @@ import { Tab, Row, Col, Nav, Button, Form } from "react-bootstrap";
 import axios from "axios";
 import { backendurl } from "./url/backendurl";
 import "./Waiter.css";
+import { toast } from "react-hot-toast";
 
 const Book = () => {
   let tables = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -61,7 +62,7 @@ const CustIn = ({ TNo }) => {
         await axios.post(`${backendurl}/booktable`, obj);
         history.push(`/orderitem/${TNo}`);
       } else {
-        alert("Table already booked");
+        toast.error("Table is already booked");
       }
     } catch (error) {
       console.error(error);

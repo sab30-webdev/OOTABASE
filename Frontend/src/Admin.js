@@ -2,6 +2,8 @@ import { Nav, Tab, Row, Col } from "react-bootstrap";
 import AddUser from "./AddUser";
 import MenuDisplay from "./MenuDisp";
 import StaffMgmt from "./StaffMgmt";
+import Transact from "./Transact";
+import "./Waiter.css";
 
 const Admin = () => {
   const handleClick = () => {};
@@ -20,6 +22,9 @@ const Admin = () => {
               <Nav.Item onClick={handleClick}>
                 <Nav.Link eventKey="third">See Staff</Nav.Link>
               </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="fourth">Transactions</Nav.Link>
+              </Nav.Item>
             </Nav>
           </Col>
           <Col sm={9}>
@@ -32,6 +37,9 @@ const Admin = () => {
               </Tab.Pane>
               <Tab.Pane eventKey="third">
                 <StaffMgmt handleClick={handleClick} />
+              </Tab.Pane>
+              <Tab.Pane eventKey="fourth">
+                <Transact />
               </Tab.Pane>
             </Tab.Content>
           </Col>

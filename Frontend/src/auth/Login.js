@@ -33,7 +33,7 @@ const Login = () => {
         localStorage.setItem("token", "kitchen");
         history.push("/kitchen");
       } else {
-        toast.error("error");
+        toast.error("Login Error");
       }
     } catch (error) {
       console.error(error);

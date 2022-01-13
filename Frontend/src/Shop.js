@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Row, Col, Button, ListGroup } from "react-bootstrap";
+import { Row, Col, Button, Table } from "react-bootstrap";
 import axios from "axios";
 import { backendurl } from "./url/backendurl";
 import { nanoid } from "nanoid";
 import { useHistory } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 const Shop = ({ tno }) => {
   const [cart, setCart] = useState([]);
@@ -77,9 +78,9 @@ const Shop = ({ tno }) => {
     });
 
     if (!err) {
-      alert("ordered");
+      toast.success("Order Succes");
     } else {
-      alert("Order failed");
+      toast.error("Order failed");
     }
   };
 
@@ -96,84 +97,97 @@ const Shop = ({ tno }) => {
   };
 
   const listItemsToBuy = () => (
-    <div className="section-center scroll-limit">
-      <ListGroup as="ul">
-        {menuItems.map((item, idx) => (
-          <ListGroup.Item as="li" key={idx}>
-            <article key={item.itemid} className="menu-item">
-              <div className="item-info">
-                <header>
-                  <p className="menu-left">{item.itemname}</p>
-                  <p className="menu-price">Rs. {item.rate}</p>
-                  <Button
-                    type="submit"
-                    className="menu-price"
-                    onClick={() => addToCart(item)}
-                  >
-                    Add
-                  </Button>
-                </header>
-              </div>
-            </article>
-          </ListGroup.Item>
-        ))}
-      </ListGroup>
+    <div className="ms-3 section-center scroll-limit mb-3 radius">
+      <Table striped hover>
+        <thead>
+          <tr className="trow">
+            <th>Item Name</th>
+            <th>Price</th>
+            <th>Add</th>
+          </tr>
+        </thead>
+        <tbody>
+          {menuItems.map((item, idx) => (
+            <tr>
+              <td key={item.itemid}>{item.itemname}</td>
+              <td>Rs. {item.rate}</td>
+              <td>
+                <Button
+                  className="addbtn"
+                  type="submit"
+                  onClick={() => addToCart(item)}
+                >
+                  Add
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </div>
   );
 
   const listItemsInCart = () => (
-    <div className="section-center scroll-limit">
-      <ListGroup as="ul">
-        {cart.map((item, idx) => (
-          <ListGroup.Item as="li" key={idx}>
-            <article key={item.itemid} className="menu-item">
-              <div className="item-info">
-                <header>
-                  <p className="cart-left">
-                    {item.itemname}({item.qty})
-                  </p>
-                  <p className="cart-price">Rs. {item.price}</p>
-                  <Button
-                    className="cart-price"
-                    type="submit"
-                    onClick={() => removeFromCart(item.itemid)}
-                  >
-                    Remove
-                  </Button>
-                </header>
-              </div>
-            </article>
-          </ListGroup.Item>
-        ))}
-      </ListGroup>
+    <div className="section-center radius scroll-limit">
+      <Table striped hover className="mb-3 ">
+        <thead>
+          <tr className="trow">
+            <th>Item Name</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Remove</th>
+          </tr>
+        </thead>
+        <tbody>
+          {cart.map((item, idx) => (
+            <tr>
+              <td key={item.itemid}>{item.itemname}</td>
+              <td>{item.qty}</td>
+              <td>Rs. {item.price}</td>
+              <td>
+                <Button
+                  type="submit"
+                  className="delbtn"
+                  onClick={() => removeFromCart(item.itemid)}
+                >
+                  Remove
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </div>
   );
 
   return (
     <div>
       <Row>
-        <Col xs={12} md={7}>
-          <h4>MENU</h4>
-          {listItemsToBuy()}
+        <Col xs={12} md={5}>
+          <div className=" mx-3 pb-2">
+            <h4 className=" ms-3 p-2  body">MENU</h4>
+            {listItemsToBuy()}
+          </div>
         </Col>
         <Col xs={12} md={5}>
-          <h4>ORDER</h4>
+          <h4 className="p-2 body">ORDER</h4>
           {listItemsInCart()}
-          <div>Total: Rs {cartTotal()}</div>
+        </Col>
+        <Col xs={12} md={2}>
           <div>
-            <Button onClick={() => setCart([])}>Clear</Button>
-            <Button className="cart-price" onClick={Order}>
+            <p className=" px-1 mb-3">Total: Rs {cartTotal()}</p>
+            <Button className="button2 delbtn" onClick={() => setCart([])}>
+              Clear
+            </Button>
+            <br />
+            <Button className="my-3 button2 addbtn" onClick={Order}>
               Order
+            </Button>
+            <Button className="button2 billbtn" onClick={goToBilling}>
+              Billing
             </Button>
           </div>
         </Col>
-      </Row>
-      <Row>
-        <div>
-          <Button variant="secondary" onClick={goToBilling}>
-            Go to Billing
-          </Button>
-        </div>
       </Row>
     </div>
   );

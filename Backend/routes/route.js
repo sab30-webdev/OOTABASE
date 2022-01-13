@@ -76,7 +76,7 @@ router.get("/bill/:tno", (req, res) => {
     try {
       var request = new sql.Request();
       request.query(
-        `SELECT itemname,price,qty,rate FROM ORDER_ITEM O,MENU M WHERE O.itemid=M.itemid AND tno=${tno}`,
+        `SELECT itemname,price,qty,rate,i_status FROM ORDER_ITEM O,MENU M WHERE O.itemid=M.itemid AND tno=${tno}`,
         (err, data) => {
           if (err) return res.send(err);
           res.send(data.recordset);
@@ -243,7 +243,7 @@ router.get("/kitchen", (req, res) => {
     try {
       var request = new sql.Request();
       request.query(
-        `SELECT TNo,IName,O.itemid,Qty,orderid FROM ORDER_ITEM O,MENU M where I_Status=0 and O.itemid=M.itemid`,
+        `SELECT tno,itemname,O.itemid,qty,orderid FROM ORDER_ITEM O,MENU M where i_status=0 and O.itemid=M.itemid`,
         (err, data) => {
           res.send(data.recordset);
         }
@@ -263,7 +263,7 @@ router.post("/delkitchen", (req, res) => {
     try {
       var request = new sql.Request();
       request.query(
-        `UPDATE ORDER_ITEM SET I_Status=1 WHERE  itemid=${itemid} and orderid=${orderid}`,
+        `UPDATE ORDER_ITEM SET I_Status=1 WHERE  itemid=${itemid} and orderid='${orderid}'`,
         (err, data) => {
           if (err) {
             res.send("Fail");
@@ -277,5 +277,22 @@ router.post("/delkitchen", (req, res) => {
     }
   });
 });
+//////////////
+router.get("/transact", (req, res) => {
+  sql.connect(config, (err) => {
+    if (err) console.error(err);
 
+    try {
+      var request = new sql.Request();
+      request.query(
+        `SELECT * FROM TRANSACTIONS order by timestamp desc`,
+        (err, data) => {
+          res.send(data.recordset);
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  });
+});
 module.exports = router;

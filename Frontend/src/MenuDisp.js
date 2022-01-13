@@ -1,9 +1,4 @@
-import {
-  Button,
-  Form,
-  Modal,
-  Table,
-} from "react-bootstrap";
+import { Button, Form, Modal, Table } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { backendurl } from "./url/backendurl";
@@ -17,7 +12,7 @@ function MenuDisplay() {
       try {
         const { data } = await axios.get(`${backendurl}/menu`);
         setMenuData(data);
-        console.log("menuData",menuData);
+        console.log("menuData", menuData);
       } catch (error) {
         console.log(error);
       }
@@ -66,10 +61,10 @@ function MenuDisplay() {
   };
 
   return (
-    <div className="gap">
-      <Table striped bordered hover size="sm">
+    <div className="gap px-3">
+      <Table striped hover size="sm">
         <thead>
-          <tr variant="primary">
+          <tr className="trow">
             <th>Item ID</th>
             <th>Item Name</th>
             <th>Price</th>
@@ -77,16 +72,15 @@ function MenuDisplay() {
           </tr>
         </thead>
         <tbody>
-          {menuData.map((t) => {
+          {menuData.map((t, idx) => {
             return (
-              <tr>
+              <tr key={idx}>
                 <td>{t.itemid}</td>
                 <td>{t.itemname}</td>
                 <td>{t.rate}</td>
                 <td>
                   <Button
-                    className="bt1 shadow"
-                    variant="primary"
+                    className="delbtn shadow"
                     onClick={() => Delete(t.itemid)}
                   >
                     Delete
@@ -97,7 +91,7 @@ function MenuDisplay() {
           })}
         </tbody>
       </Table>
-      <Button className="bt1" onClick={handleShow}>
+      <Button className="button2 addbtn" onClick={handleShow}>
         Insert
       </Button>
       <Modal show={show} onHide={handleClose} animation={false}>

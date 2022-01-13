@@ -17,9 +17,74 @@
   margin-left: 2vw;
 }
 .scroll-limit {
-  max-height: 50%;
+  max-height: 38vh;
   overflow-y: scroll;
 }
 #sidebar {
   background-color: rgb(232, 240, 250);
+}
+
+.body {
+  background-image: linear-gradient(250deg, #79f1a4 10%, #0e5cad 100%);
+  background-image: linear-gradient(15deg, #075a8a 0%, #19b9a7 100%);
+  background-image: linear-gradient(
+    60deg,
+    #3d3393 0%,
+    #2b76b9 37%,
+    #2cacd1 65%,
+    #35eb93 100%
+  );
+  border-radius: 5px;
+  color: white;
+}
+.radius {
+  border-radius: 5px;
+}
+Table {
+  background-color: white;
+}
+.trow {
+  background-image: radial-gradient(
+    circle 610px at 5.2% 51.6%,
+    rgba(5, 8, 114, 1) 0%,
+    rgba(7, 3, 53, 1) 97.5%
+  );
+  font-weight: normal;
+  color: white;
+}
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #ebebeb;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: #011377;
+}
+.delbtn {
+  background-image: linear-gradient(to right, #ea384d 0%, #d31027 80%);
+}
+.billbtn {
+  background-image: linear-gradient(
+    76.3deg,
+    rgba(44, 62, 78, 1) 12.6%,
+    rgba(69, 103, 131, 1) 82.8%
+  );
+}
+.addbtn {
+  background-image: radial-gradient(
+    circle farthest-corner at 0% 20%,
+    rgba(37, 145, 251, 0.98) 0.1%,
+    rgba(0, 7, 128, 1) 99.8%
+  );
+}
+
+.button2 {
+  padding: 1.2vw 4vw !important;
 }

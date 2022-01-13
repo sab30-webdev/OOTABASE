@@ -3,7 +3,7 @@ import logo from "./assets/OotaBaseLogo.png";
 import { useState } from "react";
 import axios from "axios";
 import { backendurl } from "./url/backendurl";
-// import { toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 
 const AddUser = () => {
   const [adminData, setAdminData] = useState({ uid: "", name: "", job: "" });
@@ -12,12 +12,11 @@ const AddUser = () => {
     e.preventDefault();
 
     try {
-      const {data} = await axios.post(`${backendurl}/auth/admin`, adminData);
-      if(data==="success")
-      {
-        alert("User added Successfully")
-      }else{
-        alert("Failed")
+      const { data } = await axios.post(`${backendurl}/auth/admin`, adminData);
+      if (data === "success") {
+        toast.success("User added Successfully");
+      } else {
+        toast.error("Failed");
       }
     } catch (error) {
       console.log(error);
@@ -67,11 +66,7 @@ const AddUser = () => {
             <option value="Kitchen">Kitchen</option>
             <option value="Admin">Admin</option>
           </Form.Select>
-          <Button
-            className="bt1 shadow"
-            variant="primary"
-            onClick={Submit}
-          >
+          <Button className="bt1 shadow" variant="primary" onClick={Submit}>
             Set User
           </Button>
         </Form>

@@ -13,7 +13,20 @@ export default function Navbar1() {
     try {
       const { data } = await axios.get(`${backendurl}/custinfo/${tno}`);
       if (data.length !== 0) {
-        history.push(`/billing/${tno}`);
+        if (tno != null) history.push(`/billing/${tno}`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleStatus = async () => {
+    let tno = prompt("Enter table no to check status");
+
+    try {
+      const { data } = await axios.get(`${backendurl}/custinfo/${tno}`);
+      if (data.length !== 0) {
+        if (tno != null) history.push(`/orderitem/${tno}`);
       }
     } catch (error) {
       console.log(error);
@@ -34,6 +47,7 @@ export default function Navbar1() {
           className="d-inline-block align-top"
         />{" "}
       </Navbar.Brand>
+
       <Nav className="me-auto">
         <Nav.Link
           onClick={() => {
@@ -43,6 +57,7 @@ export default function Navbar1() {
           BookTable
         </Nav.Link>
         <Nav.Link onClick={handleClick}>Billing</Nav.Link>
+        <Nav.Link onClick={handleStatus}>Status</Nav.Link>
       </Nav>
     </Navbar>
   );
