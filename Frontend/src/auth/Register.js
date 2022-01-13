@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
 import { useState } from "react";
-import logo from "../assets/OotaBaseLogo1.png";
+import logo from "../assets/OotaBaseLogo.png";
 import axios from "axios";
 import { backendurl } from "../url/backendurl";
 
@@ -11,6 +11,8 @@ const Register = () => {
     username: "",
     password: "",
   });
+
+  const history = useHistory();
 
   const handleChange = (e) => {
     setRegData({ ...regData, [e.target.name]: e.target.value });
@@ -23,6 +25,9 @@ const Register = () => {
     try {
       const res = await axios.post(`${backendurl}/auth/register`, regData);
       console.log(res);
+      if (res.data === "Register Success") {
+        history.push("/login");
+      }
     } catch (error) {
       console.error(error);
     }
@@ -30,12 +35,14 @@ const Register = () => {
 
   return (
     <div id="login-bg">
-      <div id="login-front">
+      <div id="login-front" className="shadow">
         <Form>
           <img src={logo} className="logo" alt="" />
+          <h1 style={{ textDecoration: "underline" }}>Register</h1>
           <Form.Group className="m-3" controlId="UID">
             <Form.Label>User ID</Form.Label>
             <Form.Control
+              className="shadow"
               type="text"
               placeholder="User ID"
               name="uid"
@@ -45,6 +52,7 @@ const Register = () => {
           <Form.Group className="m-3" controlId="UID">
             <Form.Label>Username</Form.Label>
             <Form.Control
+              className="shadow"
               type="text"
               placeholder="Username"
               name="username"
@@ -54,18 +62,19 @@ const Register = () => {
           <Form.Group className="m-3" controlId="pass">
             <Form.Label>Password</Form.Label>
             <Form.Control
+              className="shadow"
               type="password"
               placeholder="Password"
               name="password"
               onChange={handleChange}
             />
           </Form.Group>
-          <Button className="m-3" variant="primary" onClick={register}>
+          <Button className="bt1 shadow" variant="primary" onClick={register}>
             Register
           </Button>
-          <span>
+          <p style={{ padding: "3vh" }}>
             Already Registered ? <Link to="/login">Login</Link>
-          </span>
+          </p>
         </Form>
       </div>
     </div>

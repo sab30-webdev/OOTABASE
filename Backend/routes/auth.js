@@ -3,6 +3,30 @@ const router = express.Router();
 const sql = require("mssql");
 const config = require("../config");
 
+router.post("/admin", (req, res) => {
+  sql.connect(config, (err) => {
+    if (err) console.error(err);
+
+    const { uid, name, job } = req.body;
+
+    try {
+      var request = new sql.Request();
+      request.query(
+        `INSERT INTO USERS VALUES('${uid}','${name}','${job}','','') `,
+        (err, data) => {
+          if (err) {
+            res.send("fail");
+          } else {
+            res.send("success");
+          }
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  });
+});
+9
 router.post("/register", (req, res) => {
   sql.connect(config, (err) => {
     if (err) console.error(err);
@@ -14,7 +38,11 @@ router.post("/register", (req, res) => {
       request.query(
         `UPDATE USERS SET username='${username}', password='${password}' WHERE uid=${uid}`,
         (err, data) => {
-          res.send("Register Success");
+          if (err) {
+            res.send("Register Fail");
+          } else {
+            res.send("Register Success");
+          }
         }
       );
     } catch (error) {
