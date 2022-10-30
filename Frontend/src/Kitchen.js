@@ -13,27 +13,24 @@ function MenuDisplay() {
     async function call() {
       try {
         const { data } = await axios.get(`${backendurl}/kitchen`);
-        // console.log("krkfker", res);
         setOrderData(data);
-
-        console.log(orderData);
       } catch (error) {
         console.log(error);
       }
     }
     call();
   }, [refresh]);
-  // DELETION PART
 
   // setInterval(() => {
   //   setRefresh(!refresh);
   // }, 3000);
 
+  // DELETION PART
+
   const Delete = async (itemid, ordid) => {
     let delData = {};
     delData.itemid = itemid;
     delData.orderid = ordid;
-    console.log(delData);
     try {
       await axios.post(`${backendurl}/delkitchen`, delData);
       setRefresh(!refresh);
@@ -43,10 +40,10 @@ function MenuDisplay() {
   };
 
   return (
-    <div className="gap px-3">
-      <Table striped hover size="sm">
+    <div className='gap px-3'>
+      <Table striped hover size='sm'>
         <thead>
-          <tr className="trow">
+          <tr className='trow'>
             <th>Table No.</th>
             <th>Item Name</th>
             <th>Qty</th>
@@ -64,8 +61,8 @@ function MenuDisplay() {
                 <td>{t.orderid}</td>
                 <td>
                   <Button
-                    className="bt1 shadow"
-                    variant="primary"
+                    className='bt1 shadow'
+                    variant='primary'
                     onClick={() => Delete(t.itemid, t.orderid)}
                   >
                     Send

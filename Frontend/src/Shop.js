@@ -97,10 +97,10 @@ const Shop = ({ tno }) => {
   };
 
   const listItemsToBuy = () => (
-    <div className="ms-3 section-center scroll-limit mb-3 radius">
+    <div className='ms-3 section-center scroll-limit mb-3 radius'>
       <Table striped hover>
         <thead>
-          <tr className="trow">
+          <tr className='trow'>
             <th>Item Name</th>
             <th>Price</th>
             <th>Add</th>
@@ -108,13 +108,13 @@ const Shop = ({ tno }) => {
         </thead>
         <tbody>
           {menuItems.map((item, idx) => (
-            <tr>
+            <tr key={idx}>
               <td key={item.itemid}>{item.itemname}</td>
               <td>Rs. {item.rate}</td>
               <td>
                 <Button
-                  className="addbtn"
-                  type="submit"
+                  className='addbtn'
+                  type='submit'
                   onClick={() => addToCart(item)}
                 >
                   Add
@@ -128,10 +128,10 @@ const Shop = ({ tno }) => {
   );
 
   const listItemsInCart = () => (
-    <div className="section-center radius scroll-limit">
-      <Table striped hover className="mb-3 ">
+    <div className='section-center radius scroll-limit'>
+      <Table striped hover className='mb-3 '>
         <thead>
-          <tr className="trow">
+          <tr className='trow'>
             <th>Item Name</th>
             <th>Qty</th>
             <th>Price</th>
@@ -140,14 +140,14 @@ const Shop = ({ tno }) => {
         </thead>
         <tbody>
           {cart.map((item, idx) => (
-            <tr>
+            <tr key={idx}>
               <td key={item.itemid}>{item.itemname}</td>
               <td>{item.qty}</td>
               <td>Rs. {item.price}</td>
               <td>
                 <Button
-                  type="submit"
-                  className="delbtn"
+                  type='submit'
+                  className='delbtn'
                   onClick={() => removeFromCart(item.itemid)}
                 >
                   Remove
@@ -164,26 +164,26 @@ const Shop = ({ tno }) => {
     <div>
       <Row>
         <Col xs={12} md={5}>
-          <div className=" mx-3 pb-2">
-            <h4 className=" ms-3 p-2  body">MENU</h4>
+          <div className=' mx-3 pb-2'>
+            <h4 className=' ms-3 p-2  body'>MENU</h4>
             {listItemsToBuy()}
           </div>
         </Col>
         <Col xs={12} md={5}>
-          <h4 className="p-2 body">ORDER</h4>
+          <h4 className='p-2 body'>ORDER</h4>
           {listItemsInCart()}
         </Col>
         <Col xs={12} md={2}>
           <div>
-            <p className=" px-1 mb-3">Total: Rs {cartTotal()}</p>
-            <Button className="button2 delbtn" onClick={() => setCart([])}>
+            <p className=' px-1 mb-3'>Total: Rs {cartTotal()}</p>
+            <Button className='button2 delbtn' onClick={() => setCart([])}>
               Clear
             </Button>
             <br />
-            <Button className="my-3 button2 addbtn" onClick={Order}>
+            <Button className='my-3 button2 addbtn' onClick={Order}>
               Order
             </Button>
-            <Button className="button2 billbtn" onClick={goToBilling}>
+            <Button className='button2 billbtn' onClick={goToBilling}>
               Billing
             </Button>
           </div>

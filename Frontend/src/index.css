@@ -51,3 +51,7 @@
   border-radius: 0%;
   padding: 2% 5%;
 }
+
+.point {
+  cursor: pointer;
+}

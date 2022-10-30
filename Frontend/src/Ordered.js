@@ -14,7 +14,6 @@ const Ordered = () => {
     async function call() {
       try {
         const { data } = await axios.get(`${backendurl}/bill/${tno}`);
-        console.log(data);
         setOrdData(data);
       } catch (error) {
         console.log(error);
@@ -28,10 +27,10 @@ const Ordered = () => {
   // }, 3000);
 
   return (
-    <div className="scroll-limit mx-3">
-      <Table striped hover className="radius" style={{ width: "96%" }}>
+    <div className='scroll-limit mx-3'>
+      <Table striped hover className='radius' style={{ width: "96%" }}>
         <thead>
-          <tr className="trow">
+          <tr className='trow'>
             <th>Item Name</th>
             <th>Qty</th>
             <th>Price</th>
@@ -47,9 +46,9 @@ const Ordered = () => {
                 <td>{t.price}</td>
                 <td>
                   {t.i_status ? (
-                    <Badge bg="success">Success</Badge>
+                    <Badge bg='success'>Success</Badge>
                   ) : (
-                    <Badge bg="danger">Pending</Badge>
+                    <Badge bg='danger'>Pending</Badge>
                   )}
                 </td>
               </tr>

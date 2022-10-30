@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { Table, Button } from "react-bootstrap";
 import axios from "axios";
 import { backendurl } from "./url/backendurl";
@@ -9,6 +9,7 @@ const Billing = () => {
   const { tno } = useParams();
   const [billData, setBillData] = useState([]);
   const [custData, setCustData] = useState({});
+  const history = useHistory();
 
   useEffect(() => {
     async function getBill() {
@@ -35,20 +36,19 @@ const Billing = () => {
   const { cname, cphone, orderid } = custData;
 
   const clear = async () => {
-    toast.success("Billing Successful");
     const billamt = billTotal();
     let obj = { cname, cphone, billamt };
-    console.log(obj);
     try {
       const res = await axios.post(`${backendurl}/clear/${tno}`, obj);
-      console.log(res);
+      toast.success("Billing Successful");
+      history.push("/booktable");
     } catch (e) {
       console.log(e);
     }
   };
 
   return (
-    <div className="m-4">
+    <div className='m-4'>
       <h3>Billing for Table {tno}</h3>
       <h5 style={{ float: "right" }}>Phone : {cphone}</h5>
       <h5>Customer Name : {cname}</h5>
@@ -76,7 +76,7 @@ const Billing = () => {
         </tbody>
       </Table>
       <h3>Total :Rs {billTotal()}</h3>
-      <Button className="button2 billbtn" onClick={clear}>
+      <Button className='button2 billbtn' onClick={clear}>
         Generate Bill
       </Button>
     </div>
