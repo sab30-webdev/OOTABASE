@@ -1,4 +1,5 @@
 const express = require("express"); // Web Framework
+require('dotenv').config()
 const app = express();
 const cors = require("cors");
 
