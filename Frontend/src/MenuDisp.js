@@ -70,9 +70,9 @@ function MenuDisplay() {
           </tr>
         </thead>
         <tbody>
-          {menuData.map((t, idx) => {
+          {menuData.map((t) => {
             return (
-              <tr key={idx}>
+              <tr key={t.item.id}>
                 <td>{t.itemid}</td>
                 <td>{t.itemname}</td>
                 <td>{t.rate}</td>

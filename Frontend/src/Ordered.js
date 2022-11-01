@@ -3,28 +3,33 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { backendurl } from "./url/backendurl";
 import { useParams } from "react-router-dom";
-const Ordered = () => {
-  // DISPLAY PART
+import { doc, onSnapshot, getFirestore } from "firebase/firestore";
 
+const Ordered = () => {
   const { tno } = useParams();
   const [ordData, setOrdData] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const db = getFirestore();
 
   useEffect(() => {
-    async function call() {
-      try {
-        const { data } = await axios.get(`${backendurl}/bill/${tno}`);
-        setOrdData(data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    call();
+    onSnapshot(doc(db, "foodstatus/D7o26s9vkc66Aw577GlN"), async (doc) => {
+      loadFoodStatus();
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log("refresh");
+    loadFoodStatus();
   }, [refresh]);
 
-  // setInterval(() => {
-  //   setRefresh(!refresh);
-  // }, 3000);
+  async function loadFoodStatus() {
+    try {
+      const { data } = await axios.get(`${backendurl}/bill/${tno}`);
+      setOrdData(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div className='scroll-limit mx-3'>

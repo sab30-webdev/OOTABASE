@@ -5,6 +5,7 @@ import { backendurl } from "./url/backendurl";
 import { nanoid } from "nanoid";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { getStat, foodStat } from "./fire/fire";
 
 const Shop = ({ tno }) => {
   const [cart, setCart] = useState([]);
@@ -56,7 +57,7 @@ const Shop = ({ tno }) => {
     }
   };
 
-  const Order = () => {
+  const Order = async () => {
     let orderid = nanoid();
     let err = false;
     cart.forEach(async (cartItem) => {
@@ -78,7 +79,9 @@ const Shop = ({ tno }) => {
     });
 
     if (!err) {
-      toast.success("Order Succes");
+      getStat();
+      foodStat();
+      toast.success("Order Success");
     } else {
       toast.error("Order failed");
     }

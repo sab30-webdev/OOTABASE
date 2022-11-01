@@ -3,29 +3,34 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { backendurl } from "./url/backendurl";
 import "./Waiter.css";
+import { doc, onSnapshot, getFirestore } from "firebase/firestore";
+import { foodStat } from "./fire/fire";
 
 function MenuDisplay() {
   // DISPLAY PART
   const [orderData, setOrderData] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const db = getFirestore();
 
   useEffect(() => {
-    async function call() {
-      try {
-        const { data } = await axios.get(`${backendurl}/kitchen`);
-        setOrderData(data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    call();
+    onSnapshot(doc(db, "oota/kitchen"), async (doc) => {
+      sendToKitchen();
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log("refresh");
+    sendToKitchen();
   }, [refresh]);
 
-  // setInterval(() => {
-  //   setRefresh(!refresh);
-  // }, 3000);
-
-  // DELETION PART
+  async function sendToKitchen() {
+    try {
+      const { data } = await axios.get(`${backendurl}/kitchen`);
+      setOrderData(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const Delete = async (itemid, ordid) => {
     let delData = {};
@@ -33,6 +38,7 @@ function MenuDisplay() {
     delData.orderid = ordid;
     try {
       await axios.post(`${backendurl}/delkitchen`, delData);
+      foodStat();
       setRefresh(!refresh);
     } catch (error) {
       console.log(error);

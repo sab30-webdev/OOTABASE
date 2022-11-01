@@ -12,8 +12,11 @@ import {
   ProtectedKitchenRoute,
   ProtectedWaiterRoute,
 } from "./auth/ProtectedRoute";
+import initApp from "./fire/firebase";
 
 const App = () => {
+  initApp();
+
   return (
     <div className='App'>
       <Navbar />
