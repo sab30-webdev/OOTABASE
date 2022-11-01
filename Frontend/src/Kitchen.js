@@ -3,39 +3,42 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { backendurl } from "./url/backendurl";
 import "./Waiter.css";
+import { doc, onSnapshot, getFirestore } from "firebase/firestore";
+import { foodStat } from "./fire/fire";
 
 function MenuDisplay() {
   // DISPLAY PART
   const [orderData, setOrderData] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const db = getFirestore();
 
   useEffect(() => {
-    async function call() {
-      try {
-        const { data } = await axios.get(`${backendurl}/kitchen`);
-        // console.log("krkfker", res);
-        setOrderData(data);
+    onSnapshot(doc(db, "oota/kitchen"), async (doc) => {
+      sendToKitchen();
+    });
+  }, []);
 
-        console.log(orderData);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    call();
+  useEffect(() => {
+    console.log("refresh");
+    sendToKitchen();
   }, [refresh]);
-  // DELETION PART
 
-  // setInterval(() => {
-  //   setRefresh(!refresh);
-  // }, 3000);
+  async function sendToKitchen() {
+    try {
+      const { data } = await axios.get(`${backendurl}/kitchen`);
+      setOrderData(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const Delete = async (itemid, ordid) => {
     let delData = {};
     delData.itemid = itemid;
     delData.orderid = ordid;
-    console.log(delData);
     try {
       await axios.post(`${backendurl}/delkitchen`, delData);
+      foodStat();
       setRefresh(!refresh);
     } catch (error) {
       console.log(error);
@@ -43,10 +46,10 @@ function MenuDisplay() {
   };
 
   return (
-    <div className="gap px-3">
-      <Table striped hover size="sm">
+    <div className='gap px-3'>
+      <Table striped hover size='sm'>
         <thead>
-          <tr className="trow">
+          <tr className='trow'>
             <th>Table No.</th>
             <th>Item Name</th>
             <th>Qty</th>
@@ -64,8 +67,8 @@ function MenuDisplay() {
                 <td>{t.orderid}</td>
                 <td>
                   <Button
-                    className="bt1 shadow"
-                    variant="primary"
+                    className='bt1 shadow'
+                    variant='primary'
                     onClick={() => Delete(t.itemid, t.orderid)}
                   >
                     Send

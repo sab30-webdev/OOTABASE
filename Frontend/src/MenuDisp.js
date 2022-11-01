@@ -12,7 +12,6 @@ function MenuDisplay() {
       try {
         const { data } = await axios.get(`${backendurl}/menu`);
         setMenuData(data);
-        console.log("menuData", menuData);
       } catch (error) {
         console.log(error);
       }
@@ -50,21 +49,20 @@ function MenuDisplay() {
   const Submit = async (e) => {
     setShow(false);
     e.preventDefault();
-    setRefresh(!refresh);
 
     try {
       const res = await axios.post(`${backendurl}/insertmenu`, insData);
-      console.log(res);
+      setRefresh(!refresh);
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <div className="gap px-3">
-      <Table striped hover size="sm">
+    <div className='gap px-3'>
+      <Table striped hover size='sm'>
         <thead>
-          <tr className="trow">
+          <tr className='trow'>
             <th>Item ID</th>
             <th>Item Name</th>
             <th>Price</th>
@@ -72,15 +70,15 @@ function MenuDisplay() {
           </tr>
         </thead>
         <tbody>
-          {menuData.map((t, idx) => {
+          {menuData.map((t) => {
             return (
-              <tr key={idx}>
+              <tr key={t.item.id}>
                 <td>{t.itemid}</td>
                 <td>{t.itemname}</td>
                 <td>{t.rate}</td>
                 <td>
                   <Button
-                    className="delbtn shadow"
+                    className='delbtn shadow'
                     onClick={() => Delete(t.itemid)}
                   >
                     Delete
@@ -91,7 +89,7 @@ function MenuDisplay() {
           })}
         </tbody>
       </Table>
-      <Button className="button2 addbtn" onClick={handleShow}>
+      <Button className='button2 addbtn' onClick={handleShow}>
         Insert
       </Button>
       <Modal show={show} onHide={handleClose} animation={false}>
@@ -99,42 +97,42 @@ function MenuDisplay() {
           <Modal.Title>Insert Menu Item</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Group className="m-3" controlId="UID">
+          <Form.Group className='m-3' controlId='UID'>
             <Form.Label>ItemID</Form.Label>
             <Form.Control
-              className="shadow"
-              type="text"
-              placeholder="Enter Item ID"
-              name="itemid"
+              className='shadow'
+              type='text'
+              placeholder='Enter Item ID'
+              name='itemid'
               onChange={handleChange}
             />
           </Form.Group>
-          <Form.Group className="m-3" controlId="pass">
+          <Form.Group className='m-3' controlId='pass'>
             <Form.Label>Item Name</Form.Label>
             <Form.Control
-              className="shadow"
-              type="text"
-              placeholder="Enter Item Name"
-              name="Iname"
+              className='shadow'
+              type='text'
+              placeholder='Enter Item Name'
+              name='Iname'
               onChange={handleChange}
             />
           </Form.Group>
-          <Form.Group className="m-3" controlId="pass">
+          <Form.Group className='m-3' controlId='pass'>
             <Form.Label>Price</Form.Label>
             <Form.Control
-              className="shadow"
-              type="text"
-              placeholder="Enter Price"
-              name="price"
+              className='shadow'
+              type='text'
+              placeholder='Enter Price'
+              name='price'
               onChange={handleChange}
             />
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant='secondary' onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={Submit}>
+          <Button variant='primary' onClick={Submit}>
             Add to Menu
           </Button>
         </Modal.Footer>

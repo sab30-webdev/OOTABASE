@@ -3,35 +3,39 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { backendurl } from "./url/backendurl";
 import { useParams } from "react-router-dom";
-const Ordered = () => {
-  // DISPLAY PART
+import { doc, onSnapshot, getFirestore } from "firebase/firestore";
 
+const Ordered = () => {
   const { tno } = useParams();
   const [ordData, setOrdData] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const db = getFirestore();
 
   useEffect(() => {
-    async function call() {
-      try {
-        const { data } = await axios.get(`${backendurl}/bill/${tno}`);
-        console.log(data);
-        setOrdData(data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    call();
+    onSnapshot(doc(db, "foodstatus/D7o26s9vkc66Aw577GlN"), async (doc) => {
+      loadFoodStatus();
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log("refresh");
+    loadFoodStatus();
   }, [refresh]);
 
-  // setInterval(() => {
-  //   setRefresh(!refresh);
-  // }, 3000);
+  async function loadFoodStatus() {
+    try {
+      const { data } = await axios.get(`${backendurl}/bill/${tno}`);
+      setOrdData(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
-    <div className="scroll-limit mx-3">
-      <Table striped hover className="radius" style={{ width: "96%" }}>
+    <div className='scroll-limit mx-3'>
+      <Table striped hover className='radius' style={{ width: "96%" }}>
         <thead>
-          <tr className="trow">
+          <tr className='trow'>
             <th>Item Name</th>
             <th>Qty</th>
             <th>Price</th>
@@ -47,9 +51,9 @@ const Ordered = () => {
                 <td>{t.price}</td>
                 <td>
                   {t.i_status ? (
-                    <Badge bg="success">Success</Badge>
+                    <Badge bg='success'>Success</Badge>
                   ) : (
-                    <Badge bg="danger">Pending</Badge>
+                    <Badge bg='danger'>Pending</Badge>
                   )}
                 </td>
               </tr>

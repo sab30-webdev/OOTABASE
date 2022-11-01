@@ -100,6 +100,7 @@ router.post("/booktable", (req, res) => {
         `UPDATE TABLELIST SET t_status=${t_status} WHERE tno=${tno};
         INSERT INTO CUSTOMER VALUES(${tno},'${cname}',${cphone},'')`,
         (err, data) => {
+          if (err) console.log(err);
           res.send(`Updated Table status for table ${tno}`);
         }
       );

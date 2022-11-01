@@ -7,34 +7,39 @@ import Book from "./Book";
 import Billing from "./Billing";
 import Navbar from "./Navbar1";
 import Kitchen from "./Kitchen";
-import { ProtectedAdminRoute } from "./auth/ProtectedRoute";
-import { ProtectedWaiterRoute } from "./auth/ProtectedRoute";
-import { ProtectedKitchenRoute } from "./auth/ProtectedRoute";
+import {
+  ProtectedAdminRoute,
+  ProtectedKitchenRoute,
+  ProtectedWaiterRoute,
+} from "./auth/ProtectedRoute";
+import initApp from "./fire/firebase";
 
 const App = () => {
+  initApp();
+
   return (
-    <div className="App">
+    <div className='App'>
       <Navbar />
       <Switch>
-        <Route exact path="/register" component={Register} />
-        <Route exact path="/login" component={Login} />
-        <ProtectedAdminRoute exact path="/admin">
+        <Route exact path='/register' component={Register} />
+        <Route exact path='/login' component={Login} />
+        <ProtectedAdminRoute exact path='/admin'>
           <Admin />
         </ProtectedAdminRoute>
-        <ProtectedWaiterRoute exact path="/booktable">
+        <ProtectedWaiterRoute exact path='/booktable'>
           <Book />
         </ProtectedWaiterRoute>
-        <ProtectedWaiterRoute exact path="/orderitem/:tno">
+        <ProtectedWaiterRoute exact path='/orderitem/:tno'>
           <OrderItem />
         </ProtectedWaiterRoute>
-        <ProtectedWaiterRoute exact path="/billing/:tno">
+        <ProtectedWaiterRoute exact path='/billing/:tno'>
           <Billing />
         </ProtectedWaiterRoute>
-        <ProtectedKitchenRoute exact path="/kitchen">
+        <ProtectedKitchenRoute exact path='/kitchen'>
           <Kitchen />
         </ProtectedKitchenRoute>
-        <Route exact path="/">
-          <Redirect to="/login" />
+        <Route exact path='/'>
+          <Redirect to='/login' />
         </Route>
       </Switch>
     </div>

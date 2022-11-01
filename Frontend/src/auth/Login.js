@@ -41,49 +41,49 @@ const Login = () => {
   };
 
   return (
-    <div id="login-bg">
-      <div id="login-front" className="shadow">
+    <div id='login-bg'>
+      <div id='login-front' className='shadow'>
         <Form>
-          <img src={logo} className="logo" alt="" />
+          <img src={logo} className='logo' alt='' />
           <h1 style={{ textDecoration: "underline" }}>Log In</h1>
-          <Form.Group className="m-3" controlId="UID">
+          <Form.Group className='m-3' controlId='UID'>
             <Form.Label>Username</Form.Label>
             <Form.Control
-              className="shadow"
-              type="text"
-              placeholder="Username"
-              name="username"
+              className='shadow'
+              type='text'
+              placeholder='Username'
+              name='username'
               onChange={handleChange}
             />
           </Form.Group>
-          <Form.Group className="m-3" controlId="pass">
+          <Form.Group className='m-3' controlId='pass'>
             <Form.Label>Password</Form.Label>
             <Form.Control
-              className="shadow"
-              type="password"
-              placeholder="Password"
-              name="password"
+              className='shadow'
+              type='password'
+              placeholder='Password'
+              name='password'
               onChange={handleChange}
             />
           </Form.Group>
           <Form.Select
-            className="m-3 class-select shadow"
-            aria-label="Job"
-            name="job"
+            className='m-3 class-select shadow'
+            aria-label='Job'
+            name='job'
             onChange={handleChange}
           >
             <option selected disabled>
               Job
             </option>
-            <option value="Waiter">Waiter</option>
-            <option value="Kitchen">Kitchen</option>
-            <option value="Admin">Admin</option>
+            <option value='Waiter'>Waiter</option>
+            <option value='Kitchen'>Kitchen</option>
+            <option value='Admin'>Admin</option>
           </Form.Select>
-          <Button className="bt1 shadow" variant="primary" onClick={login}>
+          <Button className='bt1 shadow' variant='primary' onClick={login}>
             Login
           </Button>
           <p style={{ padding: "3vh" }}>
-            Haven't Registered ? <Link to="/register">Register</Link>
+            Haven't Registered ? <Link to='/register'>Register</Link>
           </p>
         </Form>
       </div>

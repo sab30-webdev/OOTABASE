@@ -26,10 +26,8 @@ function StaffMgmt() {
   const Delete = async (id) => {
     let delData = {};
     delData.uid = id;
-    console.log(delData);
     try {
       const res = await axios.post(`${backendurl}/delstaff`, delData);
-      console.log(res);
       setRefresh(!refresh);
     } catch (error) {
       console.log(error);
@@ -37,10 +35,10 @@ function StaffMgmt() {
   };
 
   return (
-    <div className="gap px-3">
-      <Table striped hover size="sm" className="radius">
+    <div className='gap px-3'>
+      <Table striped hover size='sm' className='radius'>
         <thead>
-          <tr className="trow">
+          <tr className='trow'>
             <th>UID</th>
             <th>Name</th>
             <th>Job</th>
@@ -56,7 +54,7 @@ function StaffMgmt() {
                 <td>{t.job}</td>
                 <td>
                   <Button
-                    className="delbtn shadow"
+                    className='delbtn shadow'
                     onClick={() => Delete(t.uid)}
                   >
                     Delete

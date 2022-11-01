@@ -12,12 +12,12 @@ const Book = () => {
 
   return (
     <>
-      <Tab.Container id="tablist" defaultActiveKey="first">
+      <Tab.Container id='tablist' defaultActiveKey='first'>
         <Row>
-          <Col sm={3} id="sidebar">
-            <Nav variant="pills" className="flex-column">
+          <Col sm={3} id='sidebar'>
+            <Nav variant='pills' className='flex-column'>
               {tables.map((t, idx) => (
-                <Nav.Item key={idx}>
+                <Nav.Item key={idx} className='point'>
                   <Nav.Link onClick={() => setbookedTable(t)}>
                     Table {t}
                   </Nav.Link>
@@ -27,7 +27,7 @@ const Book = () => {
           </Col>
           <Col sm={9}>
             <Tab.Content>
-              <Tab.Pane eventKey="first">
+              <Tab.Pane eventKey='first'>
                 <CustIn TNo={bookedTable} />
               </Tab.Pane>
             </Tab.Content>
@@ -71,36 +71,36 @@ const CustIn = ({ TNo }) => {
 
   return (
     <>
-      <div id="login-bg">
-        <div id="lock-front" className="shadow">
-          <h4>Table No. {TNo}</h4>
+      <div id='login-bg'>
+        <div id='lock-front' className='shadow'>
+          <h4>Table No {TNo}</h4>
           <Form>
-            <Form.Group className="m-3">
+            <Form.Group className='m-3'>
               <Form.Label>Customer Name</Form.Label>
               <Form.Control
-                type="text"
-                placeholder="Enter Customer Name"
-                className="shadow"
-                name="cname"
+                type='text'
+                placeholder='Enter Customer Name'
+                className='shadow'
+                name='cname'
                 onChange={(e) =>
                   setCustData({ ...custData, cname: e.target.value })
                 }
               />
             </Form.Group>
 
-            <Form.Group className="m-3">
+            <Form.Group className='m-3'>
               <Form.Label>Phone Number</Form.Label>
               <Form.Control
-                type="text"
-                placeholder="Enter Phone No"
-                className="shadow"
-                name="cphone"
+                type='text'
+                placeholder='Enter Phone No'
+                className='shadow'
+                name='cphone'
                 onChange={(e) =>
                   setCustData({ ...custData, cphone: e.target.value })
                 }
               />
             </Form.Group>
-            <Button className="m-3" variant="primary" onClick={lock}>
+            <Button className='m-3' variant='primary' onClick={lock}>
               Lock
             </Button>
           </Form>
