@@ -76,7 +76,7 @@ router.get("/bill/:tno", (req, res) => {
     try {
       var request = new sql.Request();
       request.query(
-        `SELECT itemname,price,qty,rate,i_status FROM ORDER_ITEM O,MENU M WHERE O.itemid=M.itemid AND tno=${tno}`,
+        `SELECT M.itemid,itemname,price,qty,rate,i_status FROM ORDER_ITEM O,MENU M WHERE O.itemid=M.itemid AND tno=${tno}`,
         (err, data) => {
           if (err) return res.send(err);
           res.send(data.recordset);
@@ -177,15 +177,16 @@ router.post("/insertmenu", (req, res) => {
   sql.connect(config, (err) => {
     if (err) console.error(err);
 
-    const { itemid, Iname, price } = req.body;
+    const { itemid, Iname, price, rating } = req.body;
 
     try {
       var request = new sql.Request();
       request.query(
-        `INSERT INTO MENU VALUES(${itemid},'${Iname}',${price}) `,
+        `INSERT INTO MENU VALUES(${itemid},'${Iname}',${price},${rating}) `,
         (err, data) => {
           if (err) {
             res.send("Fail");
+            console.log(err);
           } else {
             res.send("Inserted Successfully");
           }
@@ -297,3 +298,33 @@ router.get("/transact", (req, res) => {
   });
 });
 module.exports = router;
+
+function updateRating(itemid, oldrating, newrating) {
+  try {
+    var request = new sql.Request();
+    request.query(
+      `UPDATE MENU SET rating=${oldrating + newrating} WHERE itemid=${itemid}`,
+      (err, data) => {}
+    );
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+router.post("/depositRating", async (req, res) => {
+  sql.connect(config, (err) => {
+    if (err) console.error(err);
+    const ratingObj = req.body;
+
+    for (let id in ratingObj) {
+      var request = new sql.Request();
+      request.query(
+        `select rating from MENU where itemid=${id}`,
+        (err, data) => {
+          updateRating(id, data.recordset[0].rating, ratingObj[id]);
+        }
+      );
+    }
+    res.send("success");
+  });
+});

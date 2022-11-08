@@ -23,10 +23,8 @@ function MenuDisplay() {
   const Delete = async (id) => {
     let delData = {};
     delData.itemid = id;
-    console.log(delData);
     try {
       const res = await axios.post(`${backendurl}/delmenu`, delData);
-      console.log(res);
       setRefresh(!refresh);
     } catch (error) {
       console.log(error);
@@ -35,7 +33,6 @@ function MenuDisplay() {
 
   // MODAL PART
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -44,7 +41,12 @@ function MenuDisplay() {
   const handleChange = (e) => {
     setInsData({ ...insData, [e.target.name]: e.target.value });
   };
-  const [insData, setInsData] = useState({ itemid: "", Iname: "", price: "" });
+  const [insData, setInsData] = useState({
+    itemid: "",
+    Iname: "",
+    price: "",
+    rating: 0,
+  });
 
   const Submit = async (e) => {
     setShow(false);
@@ -72,7 +74,7 @@ function MenuDisplay() {
         <tbody>
           {menuData.map((t) => {
             return (
-              <tr key={t.item.id}>
+              <tr key={t.itemid}>
                 <td>{t.itemid}</td>
                 <td>{t.itemname}</td>
                 <td>{t.rate}</td>

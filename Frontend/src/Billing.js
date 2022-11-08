@@ -5,10 +5,14 @@ import axios from "axios";
 import { backendurl } from "./url/backendurl";
 import "./Waiter.css";
 import { toast } from "react-hot-toast";
+import { Rating } from "react-simple-star-rating";
+
 const Billing = () => {
   const { tno } = useParams();
   const [billData, setBillData] = useState([]);
   const [custData, setCustData] = useState({});
+  const [rating, setRating] = useState(0);
+  const [ratings, setRatings] = useState({});
   const history = useHistory();
 
   useEffect(() => {
@@ -35,16 +39,38 @@ const Billing = () => {
 
   const { cname, cphone, orderid } = custData;
 
+  // const updaterating=async()=>{
+
+  //   try {
+
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  //   return 1;
+  // }
+
   const clear = async () => {
+    if (billData.length != Object.keys(ratings).length) {
+      toast.error("Please rate all items");
+      return;
+    }
     const billamt = billTotal();
     let obj = { cname, cphone, billamt };
     try {
-      const res = await axios.post(`${backendurl}/clear/${tno}`, obj);
+      await axios.post(`${backendurl}/depositRating`, ratings);
+      console.log("1");
+      await axios.post(`${backendurl}/clear/${tno}`, obj);
+      console.log("2");
       toast.success("Billing Successful");
       history.push("/booktable");
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const handleRating = (rate, itemid) => {
+    setRating(rate);
+    setRatings({ ...ratings, [itemid]: rate });
   };
 
   return (
@@ -61,6 +87,7 @@ const Billing = () => {
             <th>Rate</th>
             <th>Qty</th>
             <th>Price</th>
+            <th>Ratings</th>
           </tr>
         </thead>
         <tbody>
@@ -71,6 +98,14 @@ const Billing = () => {
               <td>{b.rate}</td>
               <td>{b.qty}</td>
               <td>{b.price}</td>
+              <td>
+                <Rating
+                  onClick={(rate) => handleRating(rate, b.itemid)}
+                  ratingValue={rating}
+                  size={20}
+                  fillColor='#111'
+                />
+              </td>
             </tr>
           ))}
         </tbody>

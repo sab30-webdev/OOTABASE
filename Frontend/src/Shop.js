@@ -106,7 +106,7 @@ const Shop = ({ tno }) => {
           <tr className='trow'>
             <th>Item Name</th>
             <th>Price</th>
-            <th>Add</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -120,7 +120,7 @@ const Shop = ({ tno }) => {
                   type='submit'
                   onClick={() => addToCart(item)}
                 >
-                  Add
+                  +
                 </Button>
               </td>
             </tr>
@@ -138,7 +138,7 @@ const Shop = ({ tno }) => {
             <th>Item Name</th>
             <th>Qty</th>
             <th>Price</th>
-            <th>Remove</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -153,7 +153,7 @@ const Shop = ({ tno }) => {
                   className='delbtn'
                   onClick={() => removeFromCart(item.itemid)}
                 >
-                  Remove
+                  -
                 </Button>
               </td>
             </tr>

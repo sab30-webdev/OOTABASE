@@ -18,7 +18,6 @@ const Ordered = () => {
   }, []);
 
   useEffect(() => {
-    console.log("refresh");
     loadFoodStatus();
   }, [refresh]);
 
