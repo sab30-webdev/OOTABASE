@@ -6,6 +6,8 @@ import { nanoid } from "nanoid";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { getStat, foodStat } from "./fire/fire";
+import { Rating } from "react-simple-star-rating";
+
 
 const Shop = ({ tno }) => {
   const [cart, setCart] = useState([]);
@@ -106,6 +108,7 @@ const Shop = ({ tno }) => {
           <tr className='trow'>
             <th>Item Name</th>
             <th>Price</th>
+            <th>Rating</th>
             <th></th>
           </tr>
         </thead>
@@ -114,6 +117,9 @@ const Shop = ({ tno }) => {
             <tr key={idx}>
               <td key={item.itemid}>{item.itemname}</td>
               <td>Rs. {item.rate}</td>
+              <td>
+                <Rating initialValue={item.ratio} readonly={true} size={20} fillColor='#111' />
+              </td>
               <td>
                 <Button
                   className='addbtn'
@@ -166,15 +172,11 @@ const Shop = ({ tno }) => {
   return (
     <div>
       <Row>
-        <Col xs={12} md={5}>
+        <Col xs={12} md={10}>
           <div className=' mx-3 pb-2'>
             <h4 className=' ms-3 p-2  body'>MENU</h4>
             {listItemsToBuy()}
           </div>
-        </Col>
-        <Col xs={12} md={5}>
-          <h4 className='p-2 body'>ORDER</h4>
-          {listItemsInCart()}
         </Col>
         <Col xs={12} md={2}>
           <div>
@@ -189,6 +191,13 @@ const Shop = ({ tno }) => {
             <Button className='button2 billbtn' onClick={goToBilling}>
               Billing
             </Button>
+          </div>
+        </Col>
+        <Col xs={12} md={12}>
+          <div className=" mx-3 pb-2">
+          <h4 className='p-2 body'>ORDER</h4>
+          {listItemsInCart()}
+          <p></p>
           </div>
         </Col>
       </Row>

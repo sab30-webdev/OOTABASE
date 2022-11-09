@@ -116,7 +116,7 @@ router.get("/menu", (req, res) => {
 
     try {
       var request = new sql.Request();
-      request.query(`SELECT * FROM MENU`, (err, data) => {
+      request.query(`SELECT * FROM MENU ORDER BY ratio DESC`, (err, data) => {
         res.send(data.recordset);
       });
     } catch (error) {
@@ -303,8 +303,12 @@ function updateRating(itemid, oldrating, newrating) {
   try {
     var request = new sql.Request();
     request.query(
-      `UPDATE MENU SET rating=${oldrating + newrating} WHERE itemid=${itemid}`,
-      (err, data) => {}
+      `UPDATE MENU SET rating=${oldrating + newrating}, totalorders=totalorders+1 WHERE itemid=${itemid};
+      UPDATE MENU SET ratio=ceiling(rating/totalorders) WHERE itemid=${itemid} `,
+      (err, data) => {
+        if(err) console.log(err);
+        console.log(data);
+      }
     );
   } catch (error) {
     console.log(error);

@@ -8,8 +8,8 @@
 // };
 
 const config = {
-  user: "sab",
-  password: "qwerty",
+  user: "shamita",
+  password: "abcd1234",
   server: "localhost",
   database: "oota",
   synchronize: true,

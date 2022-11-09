@@ -2,6 +2,7 @@ import { Button, Form, Modal, Table } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { backendurl } from "./url/backendurl";
+import { Rating } from "react-simple-star-rating";
 
 function MenuDisplay() {
   // DISPLAY PART
@@ -68,6 +69,7 @@ function MenuDisplay() {
             <th>Item ID</th>
             <th>Item Name</th>
             <th>Price</th>
+            <th>Rating</th>
             <th>Delete</th>
           </tr>
         </thead>
@@ -77,7 +79,10 @@ function MenuDisplay() {
               <tr key={t.itemid}>
                 <td>{t.itemid}</td>
                 <td>{t.itemname}</td>
-                <td>{t.rate}</td>
+                <td>Rs. {t.rate}</td>
+                <td>
+                <Rating initialValue={t.ratio} readonly={true} size={20} fillColor='#111' />
+              </td>
                 <td>
                   <Button
                     className='delbtn shadow'
