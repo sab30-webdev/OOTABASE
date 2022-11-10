@@ -319,7 +319,7 @@ function updateRating(itemid, newrating) {
     var request = new sql.Request();
     request.query(
       `UPDATE MENU SET rating=${oldrating + newrating}, totalorders=totalorders+1 WHERE itemid=${itemid};
-      UPDATE MENU SET ratio=rating/totalorders WHERE itemid=${itemid} `,
+      UPDATE MENU SET ratio=ceiling(rating/totalorders) WHERE itemid=${itemid} `,
       (err, data) => {
         if (err) console.log(err);
       }
