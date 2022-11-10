@@ -1,0 +1,21 @@
+{
+  "name": "testdbms",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.17.1",
+    "mssql": "^7.2.1",
+    "stripe": "^10.14.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
