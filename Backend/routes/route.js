@@ -116,7 +116,7 @@ router.get("/menu", (req, res) => {
 
     try {
       var request = new sql.Request();
-      request.query(`SELECT * FROM MENU`, (err, data) => {
+      request.query(`SELECT * FROM MENU ORDER BY ratio DESC`, (err, data) => {
         res.send(data.recordset);
       });
     } catch (error) {
@@ -182,7 +182,7 @@ router.post("/insertmenu", (req, res) => {
     try {
       var request = new sql.Request();
       request.query(
-        `INSERT INTO MENU VALUES(${itemid},'${Iname}',${price},${rating}) `,
+        `INSERT INTO MENU VALUES(${itemid},'${Iname}',${price},${rating},0,0) `,
         (err, data) => {
           if (err) {
             res.send("Fail");
@@ -299,12 +299,15 @@ router.get("/transact", (req, res) => {
 });
 module.exports = router;
 
-function updateRating(itemid, oldrating, newrating) {
+function updateRating(itemid, newrating) {
   try {
     var request = new sql.Request();
     request.query(
-      `UPDATE MENU SET rating=${oldrating + newrating} WHERE itemid=${itemid}`,
-      (err, data) => {}
+      `UPDATE MENU SET rating=rating+${newrating}, totalorders=totalorders+1 WHERE itemid=${itemid};
+      UPDATE MENU SET ratio=ceiling(rating/totalorders) WHERE itemid=${itemid} `,
+      (err, data) => {
+        if (err) console.log(err);
+      }
     );
   } catch (error) {
     console.log(error);
@@ -317,13 +320,7 @@ router.post("/depositRating", async (req, res) => {
     const ratingObj = req.body;
 
     for (let id in ratingObj) {
-      var request = new sql.Request();
-      request.query(
-        `select rating from MENU where itemid=${id}`,
-        (err, data) => {
-          updateRating(id, data.recordset[0].rating, ratingObj[id]);
-        }
-      );
+      updateRating(id, ratingObj[id]);
     }
     res.send("success");
   });
