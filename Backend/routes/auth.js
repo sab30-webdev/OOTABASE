@@ -26,7 +26,7 @@ router.post("/admin", (req, res) => {
     }
   });
 });
-9
+
 router.post("/register", (req, res) => {
   sql.connect(config, (err) => {
     if (err) console.error(err);
