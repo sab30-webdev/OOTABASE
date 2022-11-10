@@ -11,7 +11,7 @@ function MenuDisplay() {
   useEffect(() => {
     async function call() {
       try {
-        const { data } = await axios.get(`${backendurl}/menu`);
+        const { data } = await axios.get(`${backendurl}/adminmenuview`);
         setMenuData(data);
       } catch (error) {
         console.log(error);
@@ -81,13 +81,8 @@ function MenuDisplay() {
                 <td>{t.itemname}</td>
                 <td>Rs. {t.rate}</td>
                 <td>
-                  <Rating
-                    initialValue={t.ratio}
-                    readonly={true}
-                    size={20}
-                    fillColor='#111'
-                  />
-                </td>
+                <Rating initialValue={t.ratio} readonly={true} size={20} fillColor='#111' allowFraction={true} />
+              </td>
                 <td>
                   <Button
                     className='delbtn shadow'

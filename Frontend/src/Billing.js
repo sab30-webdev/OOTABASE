@@ -92,6 +92,7 @@ const Billing = () => {
                   ratingValue={rating}
                   size={20}
                   fillColor='#111'
+                  allowFraction={true}
                 />
               </td>
             </tr>
