@@ -81,7 +81,13 @@ function MenuDisplay() {
                 <td>{t.itemname}</td>
                 <td>Rs. {t.rate}</td>
                 <td>
-                <Rating initialValue={t.ratio} readonly={true} size={20} fillColor='#111' allowFraction={true} />
+                <Rating 
+                  initialValue={t.ratio} 
+                  readonly={true} 
+                  size={20} 
+                  fillColor='#111' 
+                  allowFraction={true} 
+                />
               </td>
                 <td>
                   <Button
