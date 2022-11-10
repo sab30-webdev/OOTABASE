@@ -37,18 +37,6 @@ const Billing = () => {
     return total;
   };
 
-  const { cname, cphone, orderid } = custData;
-
-  // const updaterating=async()=>{
-
-  //   try {
-
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  //   return 1;
-  // }
-
   const clear = async () => {
     if (billData.length != Object.keys(ratings).length) {
       toast.error("Please rate all items");
@@ -58,9 +46,7 @@ const Billing = () => {
     let obj = { cname, cphone, billamt };
     try {
       await axios.post(`${backendurl}/depositRating`, ratings);
-      console.log("1");
       await axios.post(`${backendurl}/clear/${tno}`, obj);
-      console.log("2");
       toast.success("Billing Successful");
       history.push("/booktable");
     } catch (e) {
@@ -72,6 +58,8 @@ const Billing = () => {
     setRating(rate);
     setRatings({ ...ratings, [itemid]: rate });
   };
+
+  const { cname, cphone, orderid } = custData;
 
   return (
     <div className='m-4'>
