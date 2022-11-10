@@ -50,6 +50,7 @@ const CustIn = ({ TNo }) => {
     let { cname, cphone } = custData;
 
     if (cname === "" || cphone === "" || cphone.length !== 10) {
+      toast.error("Enter valid phone number");
       return;
     }
 
