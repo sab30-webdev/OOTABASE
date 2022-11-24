@@ -147,8 +147,6 @@ router.post("/order", (req, res) => {
   });
 });
 
-////////////////////////////////////////////////////////////////////////
-
 router.post("/delmenu", (req, res) => {
   sql.connect(config, (err) => {
     if (err) console.error(err);
@@ -279,7 +277,7 @@ router.post("/delkitchen", (req, res) => {
     }
   });
 });
-//////////////
+
 router.get("/transact", (req, res) => {
   sql.connect(config, (err) => {
     if (err) console.error(err);

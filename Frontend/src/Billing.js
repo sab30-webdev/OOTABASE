@@ -38,8 +38,10 @@ const Billing = () => {
   };
 
   const clear = async () => {
-    if (billData.length != Object.keys(ratings).length) {
-      toast.error("Please rate all items");
+    const billLen = [...new Set(billData.map((item) => item.itemid))].length;
+    const ratingLen = Object.keys(ratings).length;
+    if (billLen != ratingLen) {
+      toast.error("Please rate all food items!");
       return;
     }
     const billamt = billTotal();
