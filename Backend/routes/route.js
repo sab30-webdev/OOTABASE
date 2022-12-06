@@ -295,7 +295,6 @@ router.get("/transact", (req, res) => {
     }
   });
 });
-module.exports = router;
 
 function updateRating(itemid, newrating) {
   try {
@@ -323,3 +322,5 @@ router.post("/depositRating", async (req, res) => {
     res.send("success");
   });
 });
+
+module.exports = router;

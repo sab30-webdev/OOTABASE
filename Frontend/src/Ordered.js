@@ -42,22 +42,20 @@ const Ordered = () => {
           </tr>
         </thead>
         <tbody>
-          {ordData.map((t, idx) => {
-            return (
-              <tr key={idx}>
-                <td>{t.itemname}</td>
-                <td>{t.qty}</td>
-                <td>{t.price}</td>
-                <td>
-                  {t.i_status ? (
-                    <Badge bg='success'>Success</Badge>
-                  ) : (
-                    <Badge bg='danger'>Pending</Badge>
-                  )}
-                </td>
-              </tr>
-            );
-          })}
+          {ordData.map((t, idx) => (
+            <tr key={idx}>
+              <td>{t.itemname}</td>
+              <td>{t.qty}</td>
+              <td>{t.price}</td>
+              <td>
+                {t.i_status ? (
+                  <Badge bg='success'>Prepared</Badge>
+                ) : (
+                  <Badge bg='danger'>Cooking</Badge>
+                )}
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
     </div>
