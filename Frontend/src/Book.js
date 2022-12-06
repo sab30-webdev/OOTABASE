@@ -1,14 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { Tab, Row, Col, Nav, Button, Form } from "react-bootstrap";
+import { Tab, Row, Col, Nav, Button, Form, Badge } from "react-bootstrap";
 import axios from "axios";
 import { backendurl } from "./url/backendurl";
 import "./Waiter.css";
 import { toast } from "react-hot-toast";
+import { doc, getFirestore, onSnapshot } from "firebase/firestore";
+import { setUser } from "./fire/fire";
 
 const Book = () => {
-  let tables = [1, 2, 3, 4, 5, 6, 7, 8];
+  // let tables = [1, 2, 3, 4, 5, 6, 7, 8];
+  const [tables, setTables] = useState({});
   const [bookedTable, setbookedTable] = useState(1);
+  const db = getFirestore();
+
+  useEffect(() => {
+    onSnapshot(doc(db, "tables/JV5rJ9L66JFo7KSQdagD"), async (doc) => {
+      setTables(doc.data());
+    });
+  }, []);
 
   return (
     <>
@@ -16,10 +26,25 @@ const Book = () => {
         <Row>
           <Col sm={3} id='sidebar'>
             <Nav variant='pills' className='flex-column'>
-              {tables.map((t, idx) => (
-                <Nav.Item key={idx} className='point'>
-                  <Nav.Link onClick={() => setbookedTable(t)}>
-                    Table {t}
+              {Object.keys(tables).map((t, idx) => (
+                <Nav.Item
+                  key={idx}
+                  className={`point ${
+                    tables[t].length > 0 ? "tableStatusInd" : ""
+                  }`}
+                >
+                  <Nav.Link
+                    className={`point ${
+                      tables[t].length > 0 ? "tableStatusIndText " : ""
+                    }`}
+                    onClick={() => setbookedTable(t)}
+                  >
+                    Table No {t}{" "}
+                    {tables[t] != "" ? (
+                      <Badge bg='danger'>Booked by {tables[t]}</Badge>
+                    ) : (
+                      <Badge bg='success'>Book Now</Badge>
+                    )}
                   </Nav.Link>
                 </Nav.Item>
               ))}
@@ -45,20 +70,17 @@ const CustIn = ({ TNo }) => {
   const history = useHistory();
 
   const lock = async () => {
+    setUser(TNo, true);
     let obj = { ...custData, t_status: 1, tno: TNo };
-
     let { cname, cphone } = custData;
-
     if (cname === "" || cphone === "" || cphone.length !== 10) {
       toast.error("Enter valid phone number");
       return;
     }
-
     try {
       const { data } = await axios.post(`${backendurl}/tablecheck`, {
         tno: TNo,
       });
-
       if (data[0].t_status === 0) {
         await axios.post(`${backendurl}/booktable`, obj);
         history.push(`/orderitem/${TNo}`);

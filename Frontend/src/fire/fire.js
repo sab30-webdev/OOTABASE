@@ -1,4 +1,10 @@
-import { doc, setDoc, getDoc, getFirestore } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  getDoc,
+  getFirestore,
+  updateDoc,
+} from "firebase/firestore";
 
 async function getStat() {
   const db = getFirestore();
@@ -18,4 +24,23 @@ async function foodStat() {
   });
 }
 
-export { getStat, foodStat };
+function getUser() {
+  const user = JSON.parse(localStorage.getItem("token"));
+  return user;
+}
+
+function setUser(TNo, del) {
+  const db = getFirestore();
+  if (del === true) {
+    const userName = getUser().name;
+    updateDoc(doc(db, "tables/JV5rJ9L66JFo7KSQdagD"), {
+      [TNo]: userName,
+    });
+  } else {
+    updateDoc(doc(db, "tables/JV5rJ9L66JFo7KSQdagD"), {
+      [TNo]: "",
+    });
+  }
+}
+
+export { getStat, foodStat, getUser, setUser };

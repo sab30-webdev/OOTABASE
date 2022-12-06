@@ -62,7 +62,7 @@ router.post("/login", (req, res) => {
         `SELECT * FROM USERS WHERE username='${username}' AND password='${password}' AND job='${job}'`,
         (err, data) => {
           if (data.recordset.length > 0) {
-            return res.send("Login Success");
+            return res.send(data.recordset[0]);
           }
           res.send("Not Authorized");
         }
