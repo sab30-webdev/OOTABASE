@@ -22,15 +22,20 @@ const Login = () => {
   const login = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${backendurl}/auth/login`, logData);
-      if (logData.job === "Admin" && res.data === "Login Success") {
-        localStorage.setItem("token", "admin");
+      const { data } = await axios.post(`${backendurl}/auth/login`, logData);
+      let userObj = {
+        name: data.name,
+        job: logData.job,
+        uid: data.uid,
+      };
+      if (logData.job === "admin" && data !== "Not Authorized") {
+        localStorage.setItem("token", JSON.stringify(userObj));
         history.push("/admin");
-      } else if (res.data === "Login Success" && logData.job === "Waiter") {
-        localStorage.setItem("token", "waiter");
+      } else if (logData.job === "waiter" && data !== "Not Authorized") {
+        localStorage.setItem("token", JSON.stringify(userObj));
         history.push("/booktable");
-      } else if (res.data === "Login Success" && logData.job === "Kitchen") {
-        localStorage.setItem("token", "kitchen");
+      } else if (logData.job === "kitchen" && data !== "Not Authorized") {
+        localStorage.setItem("token", JSON.stringify(userObj));
         history.push("/kitchen");
       } else {
         toast.error("Login Error");
@@ -75,9 +80,9 @@ const Login = () => {
             <option selected disabled>
               Job
             </option>
-            <option value='Waiter'>Waiter</option>
-            <option value='Kitchen'>Kitchen</option>
-            <option value='Admin'>Admin</option>
+            <option value='waiter'>Waiter</option>
+            <option value='kitchen'>Kitchen</option>
+            <option value='admin'>Admin</option>
           </Form.Select>
           <Button className='bt1 shadow' variant='primary' onClick={login}>
             Login

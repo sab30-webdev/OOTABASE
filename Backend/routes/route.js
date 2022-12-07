@@ -162,8 +162,6 @@ router.post("/order", (req, res) => {
   });
 });
 
-////////////////////////////////////////////////////////////////////////
-
 router.post("/delmenu", (req, res) => {
   sql.connect(config, (err) => {
     if (err) console.error(err);
@@ -294,7 +292,7 @@ router.post("/delkitchen", (req, res) => {
     }
   });
 });
-//////////////
+
 router.get("/transact", (req, res) => {
   sql.connect(config, (err) => {
     if (err) console.error(err);
@@ -312,7 +310,6 @@ router.get("/transact", (req, res) => {
     }
   });
 });
-module.exports = router;
 
 function updateRating(itemid, newrating) {
   try {
@@ -340,3 +337,5 @@ router.post("/depositRating", async (req, res) => {
     res.send("success");
   });
 });
+
+module.exports = router;

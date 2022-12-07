@@ -55,3 +55,13 @@
 .point {
   cursor: pointer;
 }
+
+.tableStatusInd {
+  background: #2b1271;
+  border: 2px solid white;
+  border-radius: 24px;
+}
+
+.tableStatusIndText {
+  color: white;
+}

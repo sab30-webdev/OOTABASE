@@ -27,7 +27,7 @@ function StaffMgmt() {
     let delData = {};
     delData.uid = id;
     try {
-      const res = await axios.post(`${backendurl}/delstaff`, delData);
+      await axios.post(`${backendurl}/delstaff`, delData);
       setRefresh(!refresh);
     } catch (error) {
       console.log(error);

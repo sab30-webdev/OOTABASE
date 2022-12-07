@@ -19,7 +19,6 @@ function MenuDisplay() {
   }, []);
 
   useEffect(() => {
-    console.log("refresh");
     sendToKitchen();
   }, [refresh]);
 

@@ -25,7 +25,7 @@ function MenuDisplay() {
     let delData = {};
     delData.itemid = id;
     try {
-      const res = await axios.post(`${backendurl}/delmenu`, delData);
+      await axios.post(`${backendurl}/delmenu`, delData);
       setRefresh(!refresh);
     } catch (error) {
       console.log(error);
@@ -54,7 +54,7 @@ function MenuDisplay() {
     e.preventDefault();
 
     try {
-      const res = await axios.post(`${backendurl}/insertmenu`, insData);
+      await axios.post(`${backendurl}/insertmenu`, insData);
       setRefresh(!refresh);
     } catch (error) {
       console.log(error);
