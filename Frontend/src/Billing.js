@@ -11,6 +11,7 @@ import { setUser } from "./fire/fire";
 
 const Billing = () => {
   const { tno } = useParams();
+  const [upiId, setUpiId] = useState('')
   const [billData, setBillData] = useState([]);
   const [custData, setCustData] = useState({});
   const [rating, setRating] = useState(0);
@@ -22,7 +23,8 @@ const Billing = () => {
       try {
         const { data } = await axios.get(`${backendurl}/bill/${tno}`);
         const res = await axios.get(`${backendurl}/custinfo/${tno}`);
-        setBillData(data);
+        setBillData(data.orders);
+        setUpiId(data.upi_id)
         setCustData(res.data[0]);
       } catch (error) {
         console.log(error);
@@ -106,19 +108,19 @@ const Billing = () => {
       </Table>
       <h3>Total :Rs {billTotal()}</h3>
       {
-      // Use UPI Code for payment
+        // Use UPI Code for payment
       }
 
-{// Check if the bill amt is 0 or nullish, and render QR only form non-zero amts
-billTotal() ?
-      <p style={{textAlign:"center"}}>
-      {
-      // Easiest way of handling payments without worrying about the payment processor
-      // Dynamically generate QR Code to facilitate UPI Payments
-      }
-        <h4>Pay using UPI</h4>
-        <QRCode value={`upi://pay?pa=upi@id&pn=OOTABASE&am=${billTotal()}&tn=note_could_be_used_to_classify_payements`}/>
-      </p>:<></>}
+      {// Check if the bill amt is 0 or nullish, and render QR only form non-zero amts
+        billTotal() ?
+          <p style={{ textAlign: "center" }}>
+            {
+              // Easiest way of handling payments without worrying about the payment processor
+              // Dynamically generate QR Code to facilitate UPI Payments
+            }
+            <h4>Pay using UPI</h4>
+            <QRCode value={`upi://pay?pa=${upiId}&pn=OOTABASE&am=${billTotal()}&tn=note_could_be_used_to_classify_payements`} />
+          </p> : <></>}
       <Button className='button2 billbtn' onClick={clear}>
         Generate Bill
       </Button>

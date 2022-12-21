@@ -79,7 +79,10 @@ router.get("/bill/:tno", (req, res) => {
         `SELECT M.itemid,itemname,price,qty,rate,i_status FROM ORDER_ITEM O,MENU M WHERE O.itemid=M.itemid AND tno=${tno}`,
         (err, data) => {
           if (err) return res.send(err);
-          res.send(data.recordset);
+          res.send({
+            orders: data.recordset,
+            upi_id: config.upi_id
+          });
         }
       );
     } catch (error) {
