@@ -4,8 +4,6 @@ import axios from "axios";
 import { backendurl } from "./url/backendurl";
 
 function Transact() {
-  // DISPLAY PART
-
   const [tranData, setTranData] = useState([]);
 
   useEffect(() => {
@@ -21,10 +19,10 @@ function Transact() {
   }, []);
 
   return (
-    <div className="gap px-3">
-      <Table striped hover size="sm">
+    <div className='gap px-3'>
+      <Table striped hover size='sm'>
         <thead>
-          <tr className="trow">
+          <tr className='trow'>
             <th>Customer Name</th>
             <th>Phone</th>
             <th>Bill Amt</th>

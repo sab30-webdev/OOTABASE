@@ -9,7 +9,6 @@ import { doc, getFirestore, onSnapshot } from "firebase/firestore";
 import { setUser } from "./fire/fire";
 
 const Book = () => {
-  // let tables = [1, 2, 3, 4, 5, 6, 7, 8];
   const [tables, setTables] = useState({});
   const [bookedTable, setbookedTable] = useState(1);
   const db = getFirestore();
@@ -43,7 +42,7 @@ const Book = () => {
                     {tables[t] != "" ? (
                       <Badge bg='danger'>Booked by {tables[t]}</Badge>
                     ) : (
-                      <Badge bg='success'>Book</Badge>
+                      <Badge bg='success'>B</Badge>
                     )}
                   </Nav.Link>
                 </Nav.Item>
