@@ -4,7 +4,7 @@ import axios from "axios";
 import { backendurl } from "./url/backendurl";
 import "./Waiter.css";
 import { doc, onSnapshot, getFirestore } from "firebase/firestore";
-import { foodStat } from "./fire/fire";
+import { foodStat, setFood } from "./fire/fire";
 
 function MenuDisplay() {
   // DISPLAY PART
@@ -31,7 +31,12 @@ function MenuDisplay() {
     }
   }
 
-  const Delete = async (itemid, ordid) => {
+  const notifyFoodReady = (tno, itemname) => {
+    setFood(tno, itemname);
+  };
+
+  const Delete = async (itemid, ordid, tno, itemname) => {
+    notifyFoodReady(tno, itemname);
     let delData = {};
     delData.itemid = itemid;
     delData.orderid = ordid;
@@ -53,7 +58,7 @@ function MenuDisplay() {
             <th>Item Name</th>
             <th>Qty</th>
             <th>Orderid</th>
-            <th>Send</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -68,9 +73,11 @@ function MenuDisplay() {
                   <Button
                     className='bt1 shadow'
                     variant='primary'
-                    onClick={() => Delete(t.itemid, t.orderid)}
+                    onClick={() =>
+                      Delete(t.itemid, t.orderid, t.tno, t.itemname)
+                    }
                   >
-                    Send
+                    Prepared
                   </Button>
                 </td>
               </tr>

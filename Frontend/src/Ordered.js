@@ -49,7 +49,7 @@ const Ordered = () => {
               <td>{t.price}</td>
               <td>
                 {t.i_status ? (
-                  <Badge bg='success'>Prepared</Badge>
+                  <Badge bg='success'>Ready</Badge>
                 ) : (
                   <Badge bg='danger'>Cooking</Badge>
                 )}

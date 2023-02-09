@@ -43,4 +43,18 @@ function setUser(TNo, set) {
   }
 }
 
-export { getStat, foodStat, getUser, setUser };
+function setFood(TNo, foodItem) {
+  const db = getFirestore();
+  updateDoc(doc(db, "foodReadyNotification/RI6AKH0u52oLjfiG9XJu"), {
+    [TNo]: foodItem,
+  });
+}
+
+function clearFood(TNo) {
+  const db = getFirestore();
+  updateDoc(doc(db, "foodReadyNotification/RI6AKH0u52oLjfiG9XJu"), {
+    [TNo]: "",
+  });
+}
+
+export { getStat, foodStat, getUser, setUser, setFood, clearFood };

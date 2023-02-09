@@ -328,7 +328,10 @@ function updateRating(itemid, newrating) {
 
 router.post("/depositRating", async (req, res) => {
   sql.connect(config, (err) => {
-    if (err) console.error(err);
+    if (err) {
+      console.error(err);
+      res.send(err);
+    }
     const ratingObj = req.body;
 
     for (let id in ratingObj) {

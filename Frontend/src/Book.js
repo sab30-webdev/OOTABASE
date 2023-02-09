@@ -6,10 +6,11 @@ import { backendurl } from "./url/backendurl";
 import "./Waiter.css";
 import { toast } from "react-hot-toast";
 import { doc, getFirestore, onSnapshot } from "firebase/firestore";
-import { setUser } from "./fire/fire";
+import { setUser, clearFood } from "./fire/fire";
 
 const Book = () => {
   const [tables, setTables] = useState({});
+  const [foodNot, setFoodNot] = useState({});
   const [bookedTable, setbookedTable] = useState(1);
   const db = getFirestore();
 
@@ -17,6 +18,15 @@ const Book = () => {
     onSnapshot(doc(db, "tables/JV5rJ9L66JFo7KSQdagD"), async (doc) => {
       setTables(doc.data());
     });
+  }, []);
+
+  useEffect(() => {
+    onSnapshot(
+      doc(db, "foodReadyNotification/RI6AKH0u52oLjfiG9XJu"),
+      async (doc) => {
+        setFoodNot(doc.data());
+      }
+    );
   }, []);
 
   return (
@@ -36,7 +46,10 @@ const Book = () => {
                     className={`point ${
                       tables[t].length > 0 ? "tableStatusIndText " : ""
                     }`}
-                    onClick={() => setbookedTable(t)}
+                    onClick={() => {
+                      clearFood(t);
+                      setbookedTable(t);
+                    }}
                   >
                     Table No {t}{" "}
                     {tables[t] != "" ? (
@@ -44,6 +57,7 @@ const Book = () => {
                     ) : (
                       <Badge bg='success'>B</Badge>
                     )}
+                    {foodNot[t] != "" && <Badge bg='warning'>R</Badge>}
                   </Nav.Link>
                 </Nav.Item>
               ))}
