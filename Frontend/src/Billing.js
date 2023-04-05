@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { Table, Button } from "react-bootstrap";
 import axios from "axios";
-import QRCode from 'react-qr-code'
+import QRCode from "react-qr-code";
 import { backendurl } from "./url/backendurl";
 import "./Waiter.css";
 import { toast } from "react-hot-toast";
@@ -15,6 +15,7 @@ const Billing = () => {
   const [custData, setCustData] = useState({});
   const [rating, setRating] = useState(0);
   const [ratings, setRatings] = useState({});
+  const [upiId, setUpiId] = useState("");
   const history = useHistory();
 
   useEffect(() => {
@@ -22,7 +23,8 @@ const Billing = () => {
       try {
         const { data } = await axios.get(`${backendurl}/bill/${tno}`);
         const res = await axios.get(`${backendurl}/custinfo/${tno}`);
-        setBillData(data);
+        setBillData(data.orders);
+        setUpiId(data.upi_id);
         setCustData(res.data[0]);
       } catch (error) {
         console.log(error);
@@ -107,19 +109,26 @@ const Billing = () => {
       </Table>
       <h3>Total :Rs {billTotal()}</h3>
       {
-      // Use UPI Code for payment
+        // Use UPI Code for payment
       }
 
-{// Check if the bill amt is 0 or nullish, and render QR only form non-zero amts
-billTotal() ?
-      <p style={{textAlign:"center"}}>
       {
-      // Easiest way of handling payments without worrying about the payment processor
-      // Dynamically generate QR Code to facilitate UPI Payments
+        // Check if the bill amt is 0 or nullish, and render QR only form non-zero amts
+        billTotal() ? (
+          <p style={{ textAlign: "center" }}>
+            {
+              // Easiest way of handling payments without worrying about the payment processor
+              // Dynamically generate QR Code to facilitate UPI Payments
+            }
+            <h4>Pay using UPI</h4>
+            <QRCode
+              value={`upi://pay?pa=${upiId}&pn=OOTABASE&am=${billTotal()}&tn=note_could_be_used_to_classify_payements`}
+            />
+          </p>
+        ) : (
+          <></>
+        )
       }
-        <h4>Pay using UPI</h4>
-        <QRCode value={`upi://pay?pa=upi@id&pn=OOTABASE&am=${billTotal()}&tn=note_could_be_used_to_classify_payements`}/>
-      </p>:<></>}
       <Button className='button2 billbtn' onClick={clear}>
         Generate Bill
       </Button>

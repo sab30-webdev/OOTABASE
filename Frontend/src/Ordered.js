@@ -24,7 +24,7 @@ const Ordered = () => {
   async function loadFoodStatus() {
     try {
       const { data } = await axios.get(`${backendurl}/bill/${tno}`);
-      setOrdData(data);
+      setOrdData(data.orders);
     } catch (error) {
       console.log(error);
     }

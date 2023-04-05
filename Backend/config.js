@@ -5,6 +5,7 @@ const config = {
   database: process.env.DB,
   synchronize: true,
   trustServerCertificate: true,
+  upi_id: process.env.UPI,
 };
 
 module.exports = config;
