@@ -34,21 +34,21 @@ export default function Navbar1() {
   };
 
   return (
-    <Navbar bg="light" variant="light" style={{ padding: "0.3% 2%" }}>
+    <Navbar bg='light' variant='light' style={{ padding: "0.3% 2%" }}>
       <Navbar.Brand
         onClick={() => {
           history.push("/login");
         }}
       >
         <img
-          alt=""
+          alt=''
           src={logow}
-          height="50"
-          className="d-inline-block align-top"
-        />{" "}
+          height='50'
+          className='d-inline-block align-top'
+        />
       </Navbar.Brand>
 
-      <Nav className="me-auto">
+      <Nav className='me-auto'>
         <Nav.Link
           onClick={() => {
             history.push("/booktable");

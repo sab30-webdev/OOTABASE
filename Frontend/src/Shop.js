@@ -73,6 +73,7 @@ const Shop = ({ tno }) => {
       };
       try {
         await axios.post(`${backendurl}/order`, obj);
+        setCart([]);
       } catch (error) {
         err = true;
         console.error(error);
@@ -117,12 +118,12 @@ const Shop = ({ tno }) => {
               <td key={item.itemid}>{item.itemname}</td>
               <td>Rs. {item.rate}</td>
               <td>
-                <Rating 
-                  initialValue={item.ratio} 
-                  readonly={true} 
-                  size={20} 
-                  fillColor='#111' 
-                  allowFraction={true} 
+                <Rating
+                  initialValue={item.ratio}
+                  readonly={true}
+                  size={20}
+                  fillColor='#111'
+                  allowFraction={true}
                 />
               </td>
               <td>

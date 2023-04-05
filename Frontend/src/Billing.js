@@ -6,7 +6,7 @@ import { backendurl } from "./url/backendurl";
 import "./Waiter.css";
 import { toast } from "react-hot-toast";
 import { Rating } from "react-simple-star-rating";
-import { setUser } from "./fire/fire";
+import { setUser, clearFood } from "./fire/fire";
 
 const Billing = () => {
   const { tno } = useParams();
@@ -40,6 +40,7 @@ const Billing = () => {
 
   const clear = async () => {
     setUser(tno, false);
+    clearFood(tno);
     const billLen = [...new Set(billData.map((item) => item.itemid))].length;
     const ratingLen = Object.keys(ratings).length;
     if (billLen !== ratingLen) {

@@ -5,7 +5,7 @@ import axios from "axios";
 import { backendurl } from "./url/backendurl";
 import "./Waiter.css";
 import { toast } from "react-hot-toast";
-import { doc, getFirestore, onSnapshot } from "firebase/firestore";
+import { doc, getFirestore, onSnapshot, getDoc } from "firebase/firestore";
 import { setUser, clearFood } from "./fire/fire";
 
 const Book = () => {
@@ -51,11 +51,15 @@ const Book = () => {
                       setbookedTable(t);
                     }}
                   >
-                    Table No {t}{" "}
+                    Table No {t}
                     {tables[t] != "" ? (
-                      <Badge bg='danger'>Booked by {tables[t]}</Badge>
+                      <Badge className='available' bg='danger'>
+                        Booked by {tables[t]}
+                      </Badge>
                     ) : (
-                      <Badge bg='success'>B</Badge>
+                      <Badge className='available' bg='success'>
+                        A
+                      </Badge>
                     )}
                     {foodNot[t] != "" && <Badge bg='warning'>R</Badge>}
                   </Nav.Link>
@@ -80,7 +84,9 @@ export default Book;
 
 const CustIn = ({ TNo }) => {
   const [custData, setCustData] = useState({ cname: "", cphone: "" });
+  // const [tables, setTables] = useState({});
   const history = useHistory();
+  const db = getFirestore();
 
   const lock = async () => {
     setUser(TNo, true);
@@ -94,6 +100,9 @@ const CustIn = ({ TNo }) => {
       const { data } = await axios.post(`${backendurl}/tablecheck`, {
         tno: TNo,
       });
+      // const docRef = doc(db, "tables/JV5rJ9L66JFo7KSQdagD");
+      // const docSnap = await getDoc(docRef);
+      // setTables(docSnap.data());
       if (data[0].t_status === 0) {
         await axios.post(`${backendurl}/booktable`, obj);
         history.push(`/orderitem/${TNo}`);

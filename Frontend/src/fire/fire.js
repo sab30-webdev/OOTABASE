@@ -4,6 +4,8 @@ import {
   getDoc,
   getFirestore,
   updateDoc,
+  addDoc,
+  deleteDoc,
 } from "firebase/firestore";
 
 async function getStat() {
@@ -57,4 +59,33 @@ function clearFood(TNo) {
   });
 }
 
-export { getStat, foodStat, getUser, setUser, setFood, clearFood };
+async function addWaiter(username, password) {
+  const db = getFirestore();
+  setDoc(doc(db, `staffUsers/${username}`), {
+    pass: password,
+  });
+}
+
+async function addMenuItem(id, itemname, price) {
+  const db = getFirestore();
+  setDoc(doc(db, `menu/${id}`), {
+    item: [itemname, price],
+  });
+}
+
+function delMenuItem(id) {
+  const db = getFirestore();
+  deleteDoc(doc(db, `menu/${id}`));
+}
+
+export {
+  getStat,
+  foodStat,
+  getUser,
+  setUser,
+  setFood,
+  clearFood,
+  addWaiter,
+  addMenuItem,
+  delMenuItem,
+};

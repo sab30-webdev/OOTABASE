@@ -5,6 +5,8 @@ import { useState } from "react";
 import axios from "axios";
 import { backendurl } from "../url/backendurl";
 import { toast } from "react-hot-toast";
+import { addWaiter } from "../fire/fire";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
 
 const Login = () => {
   const [logData, setLogData] = useState({
@@ -12,11 +14,19 @@ const Login = () => {
     password: "",
     job: "",
   });
-
   const history = useHistory();
 
   const handleChange = (e) => {
     setLogData({ ...logData, [e.target.name]: e.target.value });
+  };
+
+  const handleWaiter = async () => {
+    const db = getFirestore();
+    const docRef = doc(db, `staffUsers/${logData.username}`);
+    const docSnap = await getDoc(docRef);
+    if (!docSnap.data()) {
+      addWaiter(logData.username, logData.password);
+    }
   };
 
   const login = async (e) => {
@@ -33,12 +43,15 @@ const Login = () => {
         history.push("/admin");
       } else if (logData.job === "waiter" && data !== "Not Authorized") {
         localStorage.setItem("token", JSON.stringify(userObj));
+        handleWaiter();
         history.push("/booktable");
       } else if (logData.job === "kitchen" && data !== "Not Authorized") {
         localStorage.setItem("token", JSON.stringify(userObj));
         history.push("/kitchen");
       } else {
-        toast.error("Login Error");
+        toast.error(
+          "Login failed. Please check your credentials and try again"
+        );
       }
     } catch (error) {
       console.error(error);

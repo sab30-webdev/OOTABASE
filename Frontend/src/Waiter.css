@@ -88,3 +88,8 @@ Table {
 .button2 {
   padding: 1.2vw 4vw !important;
 }
+
+.available {
+  margin-left: 5px;
+  margin-right: 5px;
+}

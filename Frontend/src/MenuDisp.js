@@ -3,11 +3,20 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { backendurl } from "./url/backendurl";
 import { Rating } from "react-simple-star-rating";
+import { addMenuItem, delMenuItem } from "./fire/fire";
 
 function MenuDisplay() {
   // DISPLAY PART
   const [menuData, setMenuData] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const [insData, setInsData] = useState({
+    itemid: "",
+    Iname: "",
+    price: "",
+    rating: 0,
+  });
+  const [show, setShow] = useState(false);
+
   useEffect(() => {
     async function call() {
       try {
@@ -19,35 +28,25 @@ function MenuDisplay() {
     }
     call();
   }, [refresh]);
-  // DELETION PART
 
   const Delete = async (id) => {
     let delData = {};
     delData.itemid = id;
     try {
       await axios.post(`${backendurl}/delmenu`, delData);
+      delMenuItem(id);
       setRefresh(!refresh);
     } catch (error) {
       console.log(error);
     }
   };
 
-  // MODAL PART
-  const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-  // INSERTION PART
 
   const handleChange = (e) => {
     setInsData({ ...insData, [e.target.name]: e.target.value });
   };
-  const [insData, setInsData] = useState({
-    itemid: "",
-    Iname: "",
-    price: "",
-    rating: 0,
-  });
 
   const Submit = async (e) => {
     setShow(false);
@@ -55,6 +54,7 @@ function MenuDisplay() {
 
     try {
       await axios.post(`${backendurl}/insertmenu`, insData);
+      addMenuItem(insData.itemid, insData.Iname, insData.price);
       setRefresh(!refresh);
     } catch (error) {
       console.log(error);
@@ -81,14 +81,14 @@ function MenuDisplay() {
                 <td>{t.itemname}</td>
                 <td>Rs. {t.rate}</td>
                 <td>
-                <Rating 
-                  initialValue={t.ratio} 
-                  readonly={true} 
-                  size={20} 
-                  fillColor='#111' 
-                  allowFraction={true} 
-                />
-              </td>
+                  <Rating
+                    initialValue={t.ratio}
+                    readonly={true}
+                    size={20}
+                    fillColor='#111'
+                    allowFraction={true}
+                  />
+                </td>
                 <td>
                   <Button
                     className='delbtn shadow'
