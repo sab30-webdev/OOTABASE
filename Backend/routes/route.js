@@ -95,13 +95,13 @@ router.post("/booktable", (req, res) => {
   sql.connect(config, (err) => {
     if (err) console.error(err);
 
-    const { t_status, tno, cname, cphone } = req.body;
+    const { t_status, tno, cname, cphone, online } = req.body;
 
     try {
       var request = new sql.Request();
       request.query(
         `UPDATE TABLELIST SET t_status=${t_status} WHERE tno=${tno};
-        INSERT INTO CUSTOMER VALUES(${tno},'${cname}',${cphone},'')`,
+        INSERT INTO CUSTOMER VALUES(${tno},'${cname}',${cphone},${online},'')`,
         (err, data) => {
           if (err) console.log(err);
           res.send(`Updated Table status for table ${tno}`);

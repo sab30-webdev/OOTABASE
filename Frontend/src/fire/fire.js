@@ -77,6 +77,14 @@ function delMenuItem(id) {
   deleteDoc(doc(db, `menu/${id}`));
 }
 
+async function checkOnlineBooked(tno) {
+  const db = getFirestore();
+  const docRef = doc(db, "tables/JV5rJ9L66JFo7KSQdagD");
+  const docSnap = await getDoc(docRef);
+  const data = docSnap.data()[tno];
+  return data;
+}
+
 export {
   getStat,
   foodStat,
@@ -87,4 +95,5 @@ export {
   addWaiter,
   addMenuItem,
   delMenuItem,
+  checkOnlineBooked,
 };

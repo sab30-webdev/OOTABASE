@@ -6,7 +6,7 @@ import { backendurl } from "./url/backendurl";
 import "./Waiter.css";
 import { toast } from "react-hot-toast";
 import { doc, getFirestore, onSnapshot } from "firebase/firestore";
-import { setUser, clearFood } from "./fire/fire";
+import { setUser, clearFood, checkOnlineBooked } from "./fire/fire";
 
 const Book = () => {
   const [tables, setTables] = useState({});
@@ -84,11 +84,17 @@ export default Book;
 
 const CustIn = ({ TNo }) => {
   const [custData, setCustData] = useState({ cname: "", cphone: "" });
-  // const [tables, setTables] = useState({});
   const history = useHistory();
+
   const lock = async () => {
-    setUser(TNo, true);
     let obj = { ...custData, t_status: 1, tno: TNo };
+    const data = await checkOnlineBooked(TNo);
+    if (data === "C") {
+      obj = { ...obj, online: 1 };
+    } else {
+      obj = { ...obj, online: 0 };
+    }
+    setUser(TNo, true);
     let { cname, cphone } = custData;
     if (cname === "" || cphone === "" || cphone.length !== 10) {
       toast.error("Enter valid phone number");

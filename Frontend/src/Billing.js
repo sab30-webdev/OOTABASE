@@ -18,6 +18,8 @@ const Billing = () => {
   const [upiId, setUpiId] = useState("");
   const history = useHistory();
 
+  const { cname, cphone, orderid, online } = custData;
+
   useEffect(() => {
     async function getBill() {
       try {
@@ -37,6 +39,9 @@ const Billing = () => {
     let total = 0;
     for (let item of billData) {
       total = total + item.price;
+    }
+    if (online === 1) {
+      total += 100;
     }
     return total;
   };
@@ -66,8 +71,6 @@ const Billing = () => {
     setRating(rate);
     setRatings({ ...ratings, [itemid]: rate });
   };
-
-  const { cname, cphone, orderid } = custData;
 
   return (
     <div className='m-4'>
@@ -107,7 +110,14 @@ const Billing = () => {
           ))}
         </tbody>
       </Table>
-      <h3>Total :Rs {billTotal()}</h3>
+      {online === 1 ? (
+        <h3>
+          Total : {billTotal() - 100}+100(prebooking) = Rs {billTotal()}
+        </h3>
+      ) : (
+        <h3>Total :Rs {billTotal()}</h3>
+      )}
+
       {
         // Use UPI Code for payment
       }
